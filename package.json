@@ -1,0 +1,24 @@
+{
+  "name": "scanner-zombs",
+  "version": "1.0.0",
+  "description": "Server scanner for zombs.io",
+  "main": "scanner.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/the-hi/scanner-zombs.git"
+  },
+  "author": "The_hi.",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/the-hi/scanner-zombs/issues"
+  },
+  "homepage": "https://github.com/the-hi/scanner-zombs#readme",
+  "dependencies": {
+    "bytebuffer": "^5.0.1",
+    "discord.js": "^14.14.1",
+    "ws": "^8.16.0"
+  }
+}
