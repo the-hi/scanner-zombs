@@ -416,4 +416,4 @@ class BinCodec {
         buffer.writeUint8(0);
     };
 }
-module.exports = BinCodec;
+export default BinCodec
