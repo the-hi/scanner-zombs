@@ -15,9 +15,10 @@ class Scanner {
         this.ws = new WebSocket(`wss://${this.hostname}:443`, { headers: { "Origin": "", "User-Agent": "" } });
         this.ws.binaryType = "arraybuffer";
 
-        this.isMade = 0;
+        // variables here DONT FUCKING TOUCH THIS BITCH
+        this.lbUpdate = 0;
+        this.Module = wasmModule();
         this.codec = new BinCodec();
-        this.ws.onclose = this.onClose.bind(this);
         this.ws.onmessage = this.onMessage.bind(this);
     }
     sendPacket(event, data) {
@@ -29,7 +30,9 @@ class Scanner {
         if (!data.allowed) return;
         LeaderBoard.set(this.server, {})
         LeaderBoard.get(this.server).pop = data.players;
+        //opcode 6
         this.enterworld2 && this.ws.send(this.enterworld2);
+        //packets to load lb
         for (let i = 0; i < 26; i++) this.ws.send(new Uint8Array([3, 17, 123, 34, 117, 112, 34, 58, 49, 44, 34, 100, 111, 119, 110, 34, 58, 48, 125]));
         this.ws.send(new Uint8Array([7, 0]));
         this.ws.send(new Uint8Array([9, 6, 0, 0, 0, 126, 8, 0, 0, 108, 27, 0, 0, 146, 23, 0, 0, 82, 23, 0, 0, 8, 91, 11, 0, 8, 91, 11, 0, 0, 0, 0, 0, 32, 78, 0, 0, 76, 79, 0, 0, 172, 38, 0, 0, 120, 155, 0, 0, 166, 39, 0, 0, 140, 35, 0, 0, 36, 44, 0, 0, 213, 37, 0, 0, 100, 0, 0, 0, 120, 55, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 134, 6, 0, 0]));
@@ -38,24 +41,21 @@ class Scanner {
         if (data.name == "Leaderboard") {
             LeaderBoard.get(this.server).lb = data.response;
             console.log(LeaderBoard)
+            if (++this.lbUpdate == 2) this.ws.close();
         }
     }
     async onMessage(msg) {
-        if (this.isMade == 0) {
-            this.isMade = 1;
-            this.Module = wasmModule();
-        }
         const opcode = new Uint8Array(msg.data);
-        if (opcode[0] == 5) {
-            this.Module.onDecodeOpcode5(opcode, this.ipAddress, decodedopcode5 => {
-                this.sendPacket(4, { displayName: "altNme", extra: decodedopcode5[5] });
-                this.enterworld2 = decodedopcode5[6];
-            });
-            return;
-        }
-        if (opcode[0] == 10) {
-            this.ws.send(this.Module.finalizeOpcode10(opcode));
-            return;
+        switch (opcode[0]) {
+            case 5:
+                this.Module.onDecodeOpcode5(opcode, this.ipAddress, decodedopcode5 => {
+                    this.sendPacket(4, { displayName: "scanigga", extra: decodedopcode5[5] });
+                    this.enterworld2 = decodedopcode5[6];
+                });
+                return;
+            case 10:
+                this.ws.send(this.Module.finalizeOpcode10(opcode));
+                return;
         }
         const data = this.codec.decode(msg.data);
         switch (data.opcode) {
@@ -67,8 +67,16 @@ class Scanner {
                 break;
         }
     }
-    onClose() {
-        console.log("A socket closed")
+}
+// scanning part
+const scanGame = (interval = 2000) => {
+    for (let server = 0; server < Object.keys(servers).length; server++) {
+        setTimeout(() => {
+            new Scanner(Object.keys(servers)[server])
+        }, server * interval)
     }
 }
-new Scanner("v1002")
+scanGame();
+setInterval(() => {
+    scanGame();
+}, 120000)
