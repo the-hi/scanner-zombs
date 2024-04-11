@@ -9,9 +9,8 @@ class Scanner {
     constructor(server) {
         this.hostname = servers[server].hostname;
         this.ipAddress = servers[server].ipAddress;
-        console.log(this.ipAddress)
 
-        this.ws = new WebSocket(`wss://${this.hostname}:443`);
+        this.ws = new WebSocket(`wss://${this.hostname}:443`, { headers: { "Origin": "", "User-Agent": "" } });
         this.ws.binaryType = "arraybuffer";
 
         this.isMade = 0;
@@ -23,6 +22,13 @@ class Scanner {
         if (this.ws.readyState == 1) {
             this.ws.send(this.codec.encode(event, data));
         }
+    }
+    onEnterWorld(data) {
+        if (!data.allowed) return;
+        this.enterworld2 && this.ws.send(this.enterworld2);
+        for (let i = 0; i < 26; i++) this.ws.send(new Uint8Array([3, 17, 123, 34, 117, 112, 34, 58, 49, 44, 34, 100, 111, 119, 110, 34, 58, 48, 125]));
+        this.ws.send(new Uint8Array([7, 0]));
+        this.ws.send(new Uint8Array([9, 6, 0, 0, 0, 126, 8, 0, 0, 108, 27, 0, 0, 146, 23, 0, 0, 82, 23, 0, 0, 8, 91, 11, 0, 8, 91, 11, 0, 0, 0, 0, 0, 32, 78, 0, 0, 76, 79, 0, 0, 172, 38, 0, 0, 120, 155, 0, 0, 166, 39, 0, 0, 140, 35, 0, 0, 36, 44, 0, 0, 213, 37, 0, 0, 100, 0, 0, 0, 120, 55, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 134, 6, 0, 0]));
     }
     async onMessage(msg) {
         if (this.isMade == 0) {
@@ -43,10 +49,10 @@ class Scanner {
             this.ws.send(this.Module.finalizeOpcode10(m));
             return;
         }
-        let data = this.codec.decode(msg.data);
-        switch (m) {
+        const data = this.codec.decode(msg.data);
+        switch (data.opcode) {
             case 0:
-                this.enterworld2 && this.ws.send(this.enterworld2);
+                this.onEnterWorld(data)
                 break;
         }
         console.log(data)
@@ -55,4 +61,4 @@ class Scanner {
         console.log("A socket closed")
     }
 }
-new Scanner("v3004")
+new Scanner("v1002")
