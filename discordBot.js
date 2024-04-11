@@ -9,9 +9,10 @@ const client = new Client({
         GatewayIntentBits.MessageContent,
     ]
 });
+// UPDATE THIS PLSSS
 const config = {
-    TOKEN: "Nzk2NjAwNDQ4NDgzNzIxMjQ3.G4ECjL.C67jjMNN8PGG5d-SflvAuGHJqXJs87qrMhr1mY",
-    CLIENT_ID: "796600448483721247"
+    TOKEN: "tk",
+    CLIENT_ID: "clientid"
 }
 
 const rest = new REST({ version: '10' }).setToken(config.TOKEN);
