@@ -39,9 +39,10 @@ class Scanner {
     }
     onRpc(data) {
         if (data.name == "Leaderboard") {
-            LeaderBoard.get(this.server).lb = data.response;
-            console.log(LeaderBoard)
-            if (++this.lbUpdate == 2) this.ws.close();
+            if (++this.lbUpdate == 2) {
+                LeaderBoard.get(this.server).lb = data.response;
+                this.ws.close();
+            }
         }
     }
     async onMessage(msg) {
@@ -80,3 +81,6 @@ scanGame();
 setInterval(() => {
     scanGame();
 }, 120000)
+// end of scanner code
+
+export { LeaderBoard as default, servers as servers };

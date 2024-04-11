@@ -2,7 +2,7 @@
   "name": "scanner-zombs",
   "version": "1.0.0",
   "description": "Server scanner for zombs.io",
-  "main": "scanner.js",
+  "main": "discordBot.js",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
