@@ -1,11 +1,12 @@
+import fetch from "node-fetch";
 import BinCodec from "./codec.js";
-import fetch from "node-fetch"
-const codec = new BinCodec();
+
 let wasmBuffers;
-(async () => {
-    const file = await fetch("https://cdn.glitch.global/14f404fe-81a3-418b-bc7c-78513660ae26/zombs_wasm%20(7).wasm?v=1710679251082");
-    wasmBuffers = await file.arrayBuffer();
-})()
+const codec = new BinCodec();
+fetch("https://cdn.glitch.global/14f404fe-81a3-418b-bc7c-78513660ae26/zombs_wasm%20(7).wasm?v=1710679251082").then(e => e.arrayBuffer().then(r => {
+    wasmBuffers = r;
+}));
+
 const wasmModule = (callback, data_12, hostname) => {
     function _0x364d84$jscomp$0(item, value, i) {
         var check = value + i;
