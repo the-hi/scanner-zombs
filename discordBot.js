@@ -92,7 +92,7 @@ client.on("interactionCreate", async int => {
             const { full, high, medium, low, currentPopulation, totalPopulation } = serverPopulations;
             const fields = [{ name: `Server stats`, value: `Total population: ${totalPopulation},\nCurrent population: ${currentPopulation},\nFull servers: ${full},\nHigh servers: ${high},\nMedium servers: ${medium},\n Low servers: ${low}`, inline: true }]
             for (const region of ["US East", "Europe", "US West", "Asia", "Australia", "South America"]) {
-                fields.push({ name: region, value: `Active servers: ${Object.values(servers).filter(e => e.region == region).length},\nTotal population: ${Object.values(servers).filter(e => e.region == region).length * 32},\nCurrent population: ${serverPopulations[region].population}`, inline: true})
+                fields.push({ name: region, value: `Active servers: ${Object.values(servers).filter(e => e.region == region).length},\nTotal population: ${Object.values(servers).filter(e => e.region == region).length * 32},\nCurrent population: ${serverPopulations[region].population}`, inline: true })
             }
             statEmbed.addFields(fields);
             await int.reply({ embeds: [statEmbed] })
