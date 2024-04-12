@@ -27,9 +27,15 @@ class Scanner {
         }
     }
     onEnterWorld(data) {
-        if (!data.allowed) return;
-        LeaderBoard.set(this.server, {})
+        !LeaderBoard.has(this.server) && LeaderBoard.set(this.server, {});
         LeaderBoard.get(this.server).pop = data.players;
+        LeaderBoard.get(this.server).serverAge = (data.startingTick * 20 / 1000 / 60 / 60 / 24).toFixed(2);
+        if (!data.allowed) {
+            LeaderBoard.get(this.server).isFull = true;
+            !LeaderBoard.get(this.server).lb && (LeaderBoard.get(this.server).lb = [])
+        }
+        if (!data.allowed) return;
+        LeaderBoard.get(this.server).isFull = false;
         //opcode 6
         this.enterworld2 && this.ws.send(this.enterworld2);
         //packets to load lb
@@ -57,14 +63,11 @@ class Scanner {
             case 10:
                 this.ws.send(this.Module.finalizeOpcode10(opcode));
                 return;
-        }
-        const data = this.codec.decode(msg.data);
-        switch (data.opcode) {
             case 4:
-                this.onEnterWorld(data)
+                this.onEnterWorld(this.codec.decode(msg.data))
                 break;
             case 9:
-                this.onRpc(data)
+                this.onRpc(this.codec.decode(msg.data))
                 break;
         }
     }

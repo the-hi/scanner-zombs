@@ -1,27 +1,40 @@
-import { REST, Routes, Client, GatewayIntentBits } from 'discord.js';
+import { REST, Routes, Client, GatewayIntentBits, EmbedBuilder } from 'discord.js';
 import LeaderBoard from './scanner.js';
 
 const client = new Client({
     intents: [
         GatewayIntentBits.DirectMessages,
         GatewayIntentBits.Guilds,
-        GatewayIntentBits.GuildMessages,
-        GatewayIntentBits.MessageContent,
     ]
 });
 // UPDATE THIS PLSSS
 const config = {
-    TOKEN: "tk",
-    CLIENT_ID: "clientid"
+    TOKEN: "",
+    CLIENT_ID: ""
 }
 
 const rest = new REST({ version: '10' }).setToken(config.TOKEN);
 const commands = [
     {
         name: 'scan',
-        description: 'Get scan results of that server.',
-        options: [{ name: "id", description: "The id of the server.", type: 3, required: true }]
+        description: 'Get scan results of that server',
+        options: [{ name: "id", description: "The id of the server", type: 3, required: true }]
     },
+    {
+        name: 'highestwave',
+        description: 'highestWave',
+        options: [{ name: "maxwave", description: "Enter the max wave you want to log", type: 3, required: true }]
+    },
+    {
+        name: 'highestscore',
+        description: 'highestScore [max score]',
+        options: [{ name: "maxscore", description: "Enter the max score you want to log", type: 3, required: true }]
+    },
+    {
+        name: 'find',
+        description: 'Find players that have the name inputed. find [name]',
+        options: [{ name: "playername", description: "Enter player name", type: 3, required: true }]
+    }
 ];
 try {
     await rest.put(Routes.applicationCommands(config.CLIENT_ID), { body: commands });
@@ -33,16 +46,29 @@ const servers = JSON.parse('{"v1001":{"id":"v1001","region":"US East","name":"US
 
 client.on("interactionCreate", async int => {
     const options = int.options._hoistedOptions[0].value;
-    if (LeaderBoard.has(options)) {
-        let text = ``;
-        LeaderBoard.get(options).lb.forEach(e => {
-            text += `name: ${e.name}, wave: ${e.wave}, score: ${e.score}, pop: ${LeaderBoard.get(options).pop}\n`;
-        })
-        int.reply(text)
-    } else if (!LeaderBoard.has(options) && servers[options]) {
-        await int.reply({ content: 'Server has not been scanned yet... try again after some time', ephemeral: true });
-    } else {
-        await int.reply({ content: 'Invalid server id try again with a valid server id.', ephemeral: true });
+    switch (int.commandName) {
+        case "scan":
+            if (LeaderBoard.has(options)) {
+                const embed = new EmbedBuilder();
+                const embedContent = [];
+                embed.setColor(0x0099FF);
+                embed.setAuthor({ name: 'The_hi.', iconURL: 'https://cdn.discordapp.com/avatars/716532384631226408/0680fa664b24818b8911c0b6fa360eab.webp?size=32' })
+                embed.setTitle(`Server id - ${options} ${servers[options].name}, Population - ${LeaderBoard.get(options).pop} ${LeaderBoard.get(options).isFull ? "[FULL]" : ""}, ServerUptime: ${LeaderBoard.get(options).serverAge}`);
+                LeaderBoard.get(options).lb.forEach(e => {
+                    embedContent.push({ name: `[${e.uid}] ${e.name}`, value: `Rank: ${LeaderBoard.get(options).lb.indexOf(e) + 1},\nWave: ${e.wave.toLocaleString()},\n Score: ${e.score.toLocaleString()}.`, inline: true });
+                })
+                embed.addFields(embedContent)
+                int.reply({ embeds: [embed] })
+                return;
+            } else if (!LeaderBoard.has(options) && servers[options]) {
+                await int.reply({ content: 'Server has not been scanned yet... try again after some time', ephemeral: true });
+                return;
+            }
+            await int.reply({ content: 'Invalid server id try again with a valid server id.', ephemeral: true });
+            break;
+        case "highestwave":
+
+            break;
     }
 })
 
