@@ -56,7 +56,7 @@ client.on("interactionCreate", async int => {
                 const embedContent = [];
                 embed.setColor(0x0099FF);
                 embed.setAuthor({ name: 'The_hi.', iconURL: 'https://cdn.discordapp.com/avatars/716532384631226408/0680fa664b24818b8911c0b6fa360eab.webp?size=32' })
-                embed.setTitle(`Server id - ${options} ${servers[options].name}, Population - ${LeaderBoard.get(options).pop} ${LeaderBoard.get(options).isFull ? "[FULL]" : ""}, ServerUptime: ${LeaderBoard.get(options).serverAge}days`);
+                embed.setTitle(`${servers[options].name} (${options}), Population - ${LeaderBoard.get(options).pop}${LeaderBoard.get(options).isFull ? "[FULL]" : ""}, ServerUptime: ${LeaderBoard.get(options).serverAge}days`);
                 LeaderBoard.get(options).lb.forEach(e => {
                     embedContent.push({ name: `[${e.uid}] ${e.name}`, value: `Rank: ${LeaderBoard.get(options).lb.indexOf(e) + 1},\nWave: ${e.wave.toLocaleString()},\n Score: ${e.score.toLocaleString()}.`, inline: true });
                 })
@@ -118,8 +118,8 @@ client.on("interactionCreate", async int => {
                 embed.setAuthor({ name: 'The_hi.', iconURL: 'https://cdn.discordapp.com/avatars/716532384631226408/0680fa664b24818b8911c0b6fa360eab.webp?size=32' })
                 embed.setTitle(`Highest waves above wave ${options}, Results: ${sortedLb.length}`)
                 for (let index = i; index < Math.min(sortedLb.length, i + 20); index++) {
-                    const { name, wave, score, uid, isFull, serverId, population } = sortedLb[index];
-                    embedContent.push({ name: `[${uid}] ${name}, Server - ${serverId}${isFull ? "[FULL]" : ""}, Population: ${population}`, value: `Wave: ${wave.toLocaleString()}, Score - ${score.toLocaleString()}`, })
+                    const { name, wave, score, isFull, serverId, population } = sortedLb[index];
+                    embedContent.push({ name: `**${name} (${serverId})${isFull ? "[FULL]" : ""}, Population: ${population}**`, value: `**[Link](https://zombs.io/#/${serverId}) Wave: ${wave.toLocaleString()}, Score - ${score.toLocaleString()}**` })
                 }
                 embed.addFields(embedContent);
                 embedMessages.push(embed);
@@ -149,8 +149,8 @@ client.on("interactionCreate", async int => {
                 embed.setAuthor({ name: 'The_hi.', iconURL: 'https://cdn.discordapp.com/avatars/716532384631226408/0680fa664b24818b8911c0b6fa360eab.webp?size=32' })
                 embed.setTitle(`Highest scores above score ${options}, Results: ${sortedScoreLb.length}`)
                 for (let index = i; index < Math.min(sortedScoreLb.length, i + 20); index++) {
-                    const { name, wave, score, uid, isFull, serverId, population } = sortedScoreLb[index];
-                    embedContent.push({ name: `[${uid}] ${name}, Server - ${serverId}${isFull ? "[FULL]" : ""}, Population: ${population}`, value: `Wave: ${wave.toLocaleString()}, Score - ${score.toLocaleString()}` })
+                    const { name, wave, score, isFull, serverId, population } = sortedLb[index];
+                    embedContent.push({ name: `**${name} (${serverId})${isFull ? "[FULL]" : ""}, Population: ${population}**`, value: `**[Link](https://zombs.io/#/${serverId}) Wave: ${wave.toLocaleString()}, Score - ${score.toLocaleString()}**` })
                 }
                 embed.addFields(embedContent);
                 embeds.push(embed);
@@ -178,10 +178,10 @@ client.on("interactionCreate", async int => {
                 const embedContent = [];
                 embed.setColor(Math.random() * 16777216 | 0);
                 embed.setAuthor({ name: 'The_hi.', iconURL: 'https://cdn.discordapp.com/avatars/716532384631226408/0680fa664b24818b8911c0b6fa360eab.webp?size=32' })
-                embed.setTitle(`Highest scores above score ${options}, Results: ${sortedNameLb.length}`)
+                embed.setTitle(`Players with name ${options}, Results: ${sortedNameLb.length}`)
                 for (let index = i; index < Math.min(sortedNameLb.length, i + 20); index++) {
-                    const { name, wave, score, uid, isFull, serverId, population } = sortedNameLb[index];
-                    embedContent.push({ name: `[${uid}] ${name}, Server - ${serverId}${isFull ? "[FULL]" : ""}, Population: ${population}`, value: `Wave: ${wave.toLocaleString()}, Score - ${score.toLocaleString()}` })
+                    const { name, wave, score, isFull, serverId, population } = sortedNameLb[index];
+                    embedContent.push({ name: `**${name} (${serverId})${isFull ? "[FULL]" : ""}, Population: ${population}**`, value: `**[Link](https://zombs.io/#/${serverId}) Wave: ${wave.toLocaleString()}, Score - ${score.toLocaleString()}**` })
                 }
                 embed.addFields(embedContent);
                 nameEmbeds.push(embed);

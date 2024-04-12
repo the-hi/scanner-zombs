@@ -22,6 +22,7 @@ class Scanner {
         this.lbUpdate = 0;
         this.Module = wasmModule();
         this.codec = new BinCodec();
+        this.ws.onerror = () => { }
         this.ws.onmessage = this.onMessage.bind(this);
     }
     sendPacket(event, data) {
@@ -31,7 +32,7 @@ class Scanner {
     }
     onEnterWorld(data) {
         LeaderBoard.get(this.server).pop = data.players;
-        LeaderBoard.get(this.server).serverAge = (data.startingTick * 20 / 1000 / 60 / 60 / 24).toFixed(2);
+        LeaderBoard.get(this.server).serverAge = Math.round(data.startingTick * 20 / 1000 / 60 / 60 / 24);
         if (!data.allowed) {
             LeaderBoard.get(this.server).isFull = true;
         }
