@@ -9,7 +9,7 @@ const client = new Client({
 });
 // UPDATE THIS PLSSS
 const config = {
-    TOKEN: "MTIyODI1MzQwMTAxNjU2NTg1MQ.GPvZVK.qJSuFEuy_LQZfRSHdZxYteGKn9UYvmtbHl0NJ4",
+    TOKEN: "",
     CLIENT_ID: "1228253401016565851"
 }
 
@@ -82,18 +82,18 @@ client.on("interactionCreate", async int => {
                 server.pop >= 20 && server.pop < 32 && ++serverPopulations.high;
                 server.pop >= 10 && server.pop < 20 && ++serverPopulations.medium;
                 // region stats
-                serverPopulations[servers[server.id].region] = {}
-                !serverPopulations[servers[server.id].region].region && (serverPopulations[servers[server.id].region].servers = 0);
-                !serverPopulations[servers[server.id].region].population && (serverPopulations[servers[server.id].region].population = 0);
+                !serverPopulations[servers[server.id].region] && (serverPopulations[servers[server.id].region] = {})
+                serverPopulations[servers[server.id].region].servers == undefined && (serverPopulations[servers[server.id].region].servers = 0);
+                serverPopulations[servers[server.id].region].population == undefined && (serverPopulations[servers[server.id].region].population = 0);
                 // increment stats
                 serverPopulations[servers[server.id].region].servers++;
                 serverPopulations[servers[server.id].region].population += server.pop;
             });
             const { full, high, medium, low, currentPopulation, totalPopulation } = serverPopulations;
-            const fields = [{ name: `Server stats`, value: `Total population: ${totalPopulation},\nCurrent population: ${currentPopulation},\nFull servers: ${full},\nHigh servers: ${high},\nMedium servers: ${medium},\n Low servers: ${low}` }]
-            ["US East", "Europe", "US West", "Asia", "Australia", "South America"].map(region => {
-                fields.push({ name: region, value: `Active servers: ${serverPopulations[region].servers},\nTotal population: ${serverPopulations[region].servers * 32},\nCurrent population: ${serverPopulations[region].population}` })
-            })
+            const fields = [{ name: `Server stats`, value: `Total population: ${totalPopulation},\nCurrent population: ${currentPopulation},\nFull servers: ${full},\nHigh servers: ${high},\nMedium servers: ${medium},\n Low servers: ${low}`, inline: true }]
+            for (const region of ["US East", "Europe", "US West", "Asia", "Australia", "South America"]) {
+                fields.push({ name: region, value: `Active servers: ${Object.values(servers).filter(e => e.region == region).length},\nTotal population: ${Object.values(servers).filter(e => e.region == region).length * 32},\nCurrent population: ${serverPopulations[region].population}`, inline: true})
+            }
             statEmbed.addFields(fields);
             await int.reply({ embeds: [statEmbed] })
             break;

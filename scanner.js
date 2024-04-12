@@ -6,6 +6,9 @@ const servers = JSON.parse('{"v1001":{"id":"v1001","region":"US East","name":"US
 // code starts here.
 const LeaderBoard = new Map();
 
+for (let i in servers) {
+    LeaderBoard.set(i, { id: i, pop: 0 })
+}
 class Scanner {
     constructor(server) {
         this.server = server;
@@ -27,7 +30,6 @@ class Scanner {
         }
     }
     onEnterWorld(data) {
-        !LeaderBoard.has(this.server) && LeaderBoard.set(this.server, { id: this.server });
         !LeaderBoard.get(this.server).lb && (LeaderBoard.get(this.server).lb = [])
 
         LeaderBoard.get(this.server).pop = data.players;
