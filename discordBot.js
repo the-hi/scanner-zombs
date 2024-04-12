@@ -1,5 +1,5 @@
 import { REST, Routes, Client, GatewayIntentBits, EmbedBuilder } from 'discord.js';
-import LeaderBoard from './scanner.js';
+import { LeaderBoard, servers } from './scanner.js';
 
 const client = new Client({
     intents: [
@@ -9,8 +9,8 @@ const client = new Client({
 });
 // UPDATE THIS PLSSS
 const config = {
-    TOKEN: "",
-    CLIENT_ID: ""
+    TOKEN: "MTIyODI1MzQwMTAxNjU2NTg1MQ.GPvZVK.qJSuFEuy_LQZfRSHdZxYteGKn9UYvmtbHl0NJ4",
+    CLIENT_ID: "1228253401016565851"
 }
 
 const rest = new REST({ version: '10' }).setToken(config.TOKEN);
@@ -22,18 +22,22 @@ const commands = [
     },
     {
         name: 'highestwave',
-        description: 'highestWave',
-        options: [{ name: "maxwave", description: "Enter the max wave you want to log", type: 3, required: true }]
+        description: 'highestWave [min wave]',
+        options: [{ name: "minwave", description: "Enter the max wave you want to log", type: 3, required: true }]
     },
     {
         name: 'highestscore',
-        description: 'highestScore [max score]',
-        options: [{ name: "maxscore", description: "Enter the max score you want to log", type: 3, required: true }]
+        description: 'highestScore [min score]',
+        options: [{ name: "minscore", description: "Enter the max score you want to log", type: 3, required: true }]
     },
     {
         name: 'find',
         description: 'Find players that have the name inputed. find [name]',
         options: [{ name: "playername", description: "Enter player name", type: 3, required: true }]
+    },
+    {
+        name: 'stats',
+        description: 'Find game stats',
     }
 ];
 try {
@@ -42,10 +46,9 @@ try {
 } catch (error) {
     console.error("There's something wrong", error);
 }
-const servers = JSON.parse('{"v1001":{"id":"v1001","region":"US East","name":"US East #1","hostname":"zombs-951c21a1-0.eggs.gg","ipAddress":"149.28.33.161"},"v1002":{"id":"v1002","region":"US East","name":"US East #2","hostname":"zombs-68ee87bc-0.eggs.gg","ipAddress":"104.238.135.188"},"v1003":{"id":"v1003","region":"US East","name":"US East #3","hostname":"zombs-cff65b62-0.eggs.gg","ipAddress":"207.246.91.98"},"v1004":{"id":"v1004","region":"US East","name":"US East #4","hostname":"zombs-2d4c041c-0.eggs.gg","ipAddress":"45.76.4.28"},"v1005":{"id":"v1005","region":"US East","name":"US East #5","hostname":"zombs-2d4dcbcc-0.eggs.gg","ipAddress":"45.77.203.204"},"v1006":{"id":"v1006","region":"US East","name":"US East #6","hostname":"zombs-2d4dc896-0.eggs.gg","ipAddress":"45.77.200.150"},"v1007":{"id":"v1007","region":"US East","name":"US East #7","hostname":"zombs-689ce185-0.eggs.gg","ipAddress":"104.156.225.133"},"v1009":{"id":"v1009","region":"US East","name":"US East #8","hostname":"zombs-cf941bbe-0.eggs.gg","ipAddress":"207.148.27.190"},"v1010":{"id":"v1010","region":"US East","name":"US East #9","hostname":"zombs-2d4d95e0-0.eggs.gg","ipAddress":"45.77.149.224"},"v1011":{"id":"v1011","region":"US East","name":"US East #10","hostname":"zombs-adc77b4d-0.eggs.gg","ipAddress":"173.199.123.77"},"v1012":{"id":"v1012","region":"US East","name":"US East #11","hostname":"zombs-2d4ca620-0.eggs.gg","ipAddress":"45.76.166.32"},"v1013":{"id":"v1013","region":"US East","name":"US East #12","hostname":"zombs-951c3ac1-0.eggs.gg","ipAddress":"149.28.58.193"},"v2001":{"id":"v2001","region":"US West","name":"US West #1","hostname":"zombs-2d4caf7a-0.eggs.gg","ipAddress":"45.76.175.122"},"v2002":{"id":"v2002","region":"US West","name":"US West #2","hostname":"zombs-951c4775-0.eggs.gg","ipAddress":"149.28.71.117"},"v2003":{"id":"v2003","region":"US West","name":"US West #3","hostname":"zombs-951c5784-0.eggs.gg","ipAddress":"149.28.87.132"},"v2004":{"id":"v2004","region":"US West","name":"US West #4","hostname":"zombs-cff66e0d-0.eggs.gg","ipAddress":"207.246.110.13"},"v2005":{"id":"v2005","region":"US West","name":"US West #5","hostname":"zombs-2d4c44d2-0.eggs.gg","ipAddress":"45.76.68.210"},"v2006":{"id":"v2006","region":"US West","name":"US West #6","hostname":"zombs-6c3ddbf4-0.eggs.gg","ipAddress":"108.61.219.244"},"v5001":{"id":"v5001","region":"Europe","name":"Europe #1","hostname":"zombs-5fb3f146-0.eggs.gg","ipAddress":"95.179.241.70"},"v5002":{"id":"v5002","region":"Europe","name":"Europe #2","hostname":"zombs-50f01305-0.eggs.gg","ipAddress":"80.240.19.5"},"v5003":{"id":"v5003","region":"Europe","name":"Europe #3","hostname":"zombs-d9a31dae-0.eggs.gg","ipAddress":"217.163.29.174"},"v5004":{"id":"v5004","region":"Europe","name":"Europe #4","hostname":"zombs-50f0196b-0.eggs.gg","ipAddress":"80.240.25.107"},"v5005":{"id":"v5005","region":"Europe","name":"Europe #5","hostname":"zombs-2d4d3541-0.eggs.gg","ipAddress":"45.77.53.65"},"v5006":{"id":"v5006","region":"Europe","name":"Europe #6","hostname":"zombs-5fb3a70c-0.eggs.gg","ipAddress":"95.179.167.12"},"v5007":{"id":"v5007","region":"Europe","name":"Europe #7","hostname":"zombs-5fb3a4cb-0.eggs.gg","ipAddress":"95.179.164.203"},"v5008":{"id":"v5008","region":"Europe","name":"Europe #8","hostname":"zombs-5fb3a361-0.eggs.gg","ipAddress":"95.179.163.97"},"v5009":{"id":"v5009","region":"Europe","name":"Europe #9","hostname":"zombs-c7f71341-0.eggs.gg","ipAddress":"199.247.19.65"},"v5010":{"id":"v5010","region":"Europe","name":"Europe #10","hostname":"zombs-88f4532c-0.eggs.gg","ipAddress":"136.244.83.44"},"v5011":{"id":"v5011","region":"Europe","name":"Europe #11","hostname":"zombs-2d209ed2-0.eggs.gg","ipAddress":"45.32.158.210"},"v5012":{"id":"v5012","region":"Europe","name":"Europe #12","hostname":"zombs-5fb3a911-0.eggs.gg","ipAddress":"95.179.169.17"},"v3001":{"id":"v3001","region":"Asia","name":"Asia #1","hostname":"zombs-422a3476-0.eggs.gg","ipAddress":"66.42.52.118"},"v3002":{"id":"v3002","region":"Asia","name":"Asia #2","hostname":"zombs-2d4df8b4-0.eggs.gg","ipAddress":"45.77.248.180"},"v3003":{"id":"v3003","region":"Asia","name":"Asia #3","hostname":"zombs-2d4df94b-0.eggs.gg","ipAddress":"45.77.249.75"},"v3004":{"id":"v3004","region":"Asia","name":"Asia #4","hostname":"zombs-951c9257-0.eggs.gg","ipAddress":"149.28.146.87"},"v3005":{"id":"v3005","region":"Asia","name":"Asia #5","hostname":"zombs-8bb488d9-0.eggs.gg","ipAddress":"139.180.136.217"},"v3006":{"id":"v3006","region":"Asia","name":"Asia #6","hostname":"zombs-2d4d2cb0-0.eggs.gg","ipAddress":"45.77.44.176"},"v4001":{"id":"v4001","region":"Australia","name":"Australia #1","hostname":"zombs-8bb4a905-0.eggs.gg","ipAddress":"139.180.169.5"},"v4002":{"id":"v4002","region":"Australia","name":"Australia #2","hostname":"zombs-cf9456d1-0.eggs.gg","ipAddress":"207.148.86.209"},"v4003":{"id":"v4003","region":"Australia","name":"Australia #3","hostname":"zombs-951cb6a1-0.eggs.gg","ipAddress":"149.28.182.161"},"v4004":{"id":"v4004","region":"Australia","name":"Australia #4","hostname":"zombs-951cab15-0.eggs.gg","ipAddress":"149.28.171.21"},"v4005":{"id":"v4005","region":"Australia","name":"Australia #5","hostname":"zombs-951caa7b-0.eggs.gg","ipAddress":"149.28.170.123"},"v4006":{"id":"v4006","region":"Australia","name":"Australia #6","hostname":"zombs-951ca5c7-0.eggs.gg","ipAddress":"149.28.165.199"},"v6001":{"id":"v6001","region":"South America","name":"South America #1","hostname":"zombs-951c6374-0.eggs.gg","ipAddress":"149.28.99.116"},"v6002":{"id":"v6002","region":"South America","name":"South America #2","hostname":"zombs-951c6184-0.eggs.gg","ipAddress":"149.28.97.132"},"v6003":{"id":"v6003","region":"South America","name":"South America #3","hostname":"zombs-cff648c2-0.eggs.gg","ipAddress":"207.246.72.194"},"v6004":{"id":"v6004","region":"South America","name":"South America #4","hostname":"zombs-90ca2e40-0.eggs.gg","ipAddress":"144.202.46.64"},"v6005":{"id":"v6005","region":"South America","name":"South America #5","hostname":"zombs-2d20af04-0.eggs.gg","ipAddress":"45.32.175.4"}}')
 
 client.on("interactionCreate", async int => {
-    const options = int.options._hoistedOptions[0].value;
+    const options = int?.options?._hoistedOptions[0]?.value;
     switch (int.commandName) {
         case "scan":
             if (LeaderBoard.has(options)) {
@@ -53,7 +56,7 @@ client.on("interactionCreate", async int => {
                 const embedContent = [];
                 embed.setColor(0x0099FF);
                 embed.setAuthor({ name: 'The_hi.', iconURL: 'https://cdn.discordapp.com/avatars/716532384631226408/0680fa664b24818b8911c0b6fa360eab.webp?size=32' })
-                embed.setTitle(`Server id - ${options} ${servers[options].name}, Population - ${LeaderBoard.get(options).pop} ${LeaderBoard.get(options).isFull ? "[FULL]" : ""}, ServerUptime: ${LeaderBoard.get(options).serverAge}`);
+                embed.setTitle(`Server id - ${options} ${servers[options].name}, Population - ${LeaderBoard.get(options).pop} ${LeaderBoard.get(options).isFull ? "[FULL]" : ""}, ServerUptime: ${LeaderBoard.get(options).serverAge}days`);
                 LeaderBoard.get(options).lb.forEach(e => {
                     embedContent.push({ name: `[${e.uid}] ${e.name}`, value: `Rank: ${LeaderBoard.get(options).lb.indexOf(e) + 1},\nWave: ${e.wave.toLocaleString()},\n Score: ${e.score.toLocaleString()}.`, inline: true });
                 })
@@ -66,8 +69,126 @@ client.on("interactionCreate", async int => {
             }
             await int.reply({ content: 'Invalid server id try again with a valid server id.', ephemeral: true });
             break;
+        case "stats":
+            const statEmbed = new EmbedBuilder();
+            statEmbed.setColor(Math.random() * 16777216 | 0);
+            statEmbed.setAuthor({ name: 'The_hi.', iconURL: 'https://cdn.discordapp.com/avatars/716532384631226408/0680fa664b24818b8911c0b6fa360eab.webp?size=32' })
+            statEmbed.setTitle(`Zombs server stats`);
+            const serverPopulations = { full: 0, high: 0, medium: 0, low: 0, currentPopulation: 0, totalPopulation: Object.keys(servers).length * 32 };
+            LeaderBoard.forEach(server => {
+                server.pop < 10 && ++serverPopulations.low;
+                server.pop == 32 && ++serverPopulations.full;
+                serverPopulations.currentPopulation += server.pop;
+                server.pop >= 20 && server.pop < 32 && ++serverPopulations.high;
+                server.pop >= 10 && server.pop < 20 && ++serverPopulations.medium;
+                // region stats
+                serverPopulations[servers[server.id].region] = {}
+                !serverPopulations[servers[server.id].region].region && (serverPopulations[servers[server.id].region].servers = 0);
+                !serverPopulations[servers[server.id].region].population && (serverPopulations[servers[server.id].region].population = 0);
+                // increment stats
+                serverPopulations[servers[server.id].region].servers++;
+                serverPopulations[servers[server.id].region].population += server.pop;
+            });
+            const { full, high, medium, low, currentPopulation, totalPopulation } = serverPopulations;
+            const fields = [{ name: `Server stats`, value: `Total population: ${totalPopulation},\nCurrent population: ${currentPopulation},\nFull servers: ${full},\nHigh servers: ${high},\nMedium servers: ${medium},\n Low servers: ${low}` }]
+            ["US East", "Europe", "US West", "Asia", "Australia", "South America"].map(region => {
+                fields.push({ name: region, value: `Active servers: ${serverPopulations[region].servers},\nTotal population: ${serverPopulations[region].servers * 32},\nCurrent population: ${serverPopulations[region].population}` })
+            })
+            statEmbed.addFields(fields);
+            await int.reply({ embeds: [statEmbed] })
+            break;
         case "highestwave":
-
+            const lb = [];
+            const embedMessages = [];
+            LeaderBoard.forEach(server => {
+                server.lb.forEach(lbIndex => {
+                    if (lbIndex.wave >= parseInt(options)) {
+                        lbIndex = { ...lbIndex, serverId: server.id, isFull: server.isFull, population: server.pop }
+                        lb.push(lbIndex);
+                    }
+                })
+            })
+            const sortedLb = lb.sort((a, b) => {
+                return b.wave - a.wave
+            });
+            for (let i = 0; i < sortedLb.length; i += 20) {
+                const embed = new EmbedBuilder();
+                const embedContent = [];
+                embed.setColor(Math.random() * 16777216 | 0);
+                embed.setAuthor({ name: 'The_hi.', iconURL: 'https://cdn.discordapp.com/avatars/716532384631226408/0680fa664b24818b8911c0b6fa360eab.webp?size=32' })
+                embed.setTitle(`Highest waves above wave ${options}, Results: ${sortedLb.length}`)
+                for (let index = i; index < Math.min(sortedLb.length, i + 20); index++) {
+                    const { name, wave, score, uid, isFull, serverId, population } = sortedLb[index];
+                    embedContent.push({ name: `[${uid}] ${name}, Server - ${serverId}${isFull ? "[FULL]" : ""}, Population: ${population}`, value: `Wave: ${wave.toLocaleString()}, Score - ${score.toLocaleString()}`, })
+                }
+                embed.addFields(embedContent);
+                embedMessages.push(embed);
+            }
+            embedMessages.forEach(async embed => {
+                embedMessages.indexOf(embed) === 0 ? await int.reply({ embeds: [embed] }) : await int.channel.send({ embeds: [embed] })
+            })
+            break;
+        case "highestscore":
+            const scoreLb = [];
+            const embeds = [];
+            LeaderBoard.forEach(server => {
+                server.lb.forEach(lbIndex => {
+                    if (lbIndex.score >= parseInt(options)) {
+                        lbIndex = { ...lbIndex, serverId: server.id, isFull: server.isFull, population: server.pop }
+                        scoreLb.push(lbIndex);
+                    }
+                })
+            })
+            const sortedScoreLb = scoreLb.sort((a, b) => {
+                return b.score - a.score
+            });
+            for (let i = 0; i < sortedScoreLb.length; i += 20) {
+                const embed = new EmbedBuilder();
+                const embedContent = [];
+                embed.setColor(Math.random() * 16777216 | 0);
+                embed.setAuthor({ name: 'The_hi.', iconURL: 'https://cdn.discordapp.com/avatars/716532384631226408/0680fa664b24818b8911c0b6fa360eab.webp?size=32' })
+                embed.setTitle(`Highest scores above score ${options}, Results: ${sortedScoreLb.length}`)
+                for (let index = i; index < Math.min(sortedScoreLb.length, i + 20); index++) {
+                    const { name, wave, score, uid, isFull, serverId, population } = sortedScoreLb[index];
+                    embedContent.push({ name: `[${uid}] ${name}, Server - ${serverId}${isFull ? "[FULL]" : ""}, Population: ${population}`, value: `Wave: ${wave.toLocaleString()}, Score - ${score.toLocaleString()}` })
+                }
+                embed.addFields(embedContent);
+                embeds.push(embed);
+            }
+            embeds.forEach(async embed => {
+                embeds.indexOf(embed) === 0 ? await int.reply({ embeds: [embed] }) : await int.channel.send({ embeds: [embed] })
+            })
+            break;
+        case "find":
+            const playersWithName = [];
+            const nameEmbeds = []
+            LeaderBoard.forEach(server => {
+                server.lb.forEach(lbIndex => {
+                    if (lbIndex.name.includes(options)) {
+                        lbIndex = { ...lbIndex, serverId: server.id, isFull: server.isFull, population: server.pop }
+                        playersWithName.push(lbIndex);
+                    }
+                })
+            })
+            const sortedNameLb = playersWithName.sort((a, b) => {
+                return b.wave - a.wave
+            });
+            for (let i = 0; i < sortedNameLb.length; i += 20) {
+                const embed = new EmbedBuilder();
+                const embedContent = [];
+                embed.setColor(Math.random() * 16777216 | 0);
+                embed.setAuthor({ name: 'The_hi.', iconURL: 'https://cdn.discordapp.com/avatars/716532384631226408/0680fa664b24818b8911c0b6fa360eab.webp?size=32' })
+                embed.setTitle(`Highest scores above score ${options}, Results: ${sortedNameLb.length}`)
+                for (let index = i; index < Math.min(sortedNameLb.length, i + 20); index++) {
+                    const { name, wave, score, uid, isFull, serverId, population } = sortedNameLb[index];
+                    embedContent.push({ name: `[${uid}] ${name}, Server - ${serverId}${isFull ? "[FULL]" : ""}, Population: ${population}`, value: `Wave: ${wave.toLocaleString()}, Score - ${score.toLocaleString()}` })
+                }
+                embed.addFields(embedContent);
+                nameEmbeds.push(embed);
+            }
+            nameEmbeds.forEach(async embed => {
+                nameEmbeds.indexOf(embed) === 0 ? await int.reply({ embeds: [embed] }) : await int.channel.send({ embeds: [embed] })
+            })
             break;
     }
 })

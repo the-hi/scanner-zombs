@@ -27,12 +27,13 @@ class Scanner {
         }
     }
     onEnterWorld(data) {
-        !LeaderBoard.has(this.server) && LeaderBoard.set(this.server, {});
+        !LeaderBoard.has(this.server) && LeaderBoard.set(this.server, { id: this.server });
+        !LeaderBoard.get(this.server).lb && (LeaderBoard.get(this.server).lb = [])
+
         LeaderBoard.get(this.server).pop = data.players;
         LeaderBoard.get(this.server).serverAge = (data.startingTick * 20 / 1000 / 60 / 60 / 24).toFixed(2);
         if (!data.allowed) {
             LeaderBoard.get(this.server).isFull = true;
-            !LeaderBoard.get(this.server).lb && (LeaderBoard.get(this.server).lb = [])
         }
         if (!data.allowed) return;
         LeaderBoard.get(this.server).isFull = false;
@@ -86,4 +87,5 @@ setInterval(() => {
 }, 120000)
 // end of scanner code
 
-export { LeaderBoard as default, servers as servers };
+export { LeaderBoard, servers };
+
