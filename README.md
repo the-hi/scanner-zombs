@@ -17,10 +17,11 @@ Creating a project called Server Scanner is a response to a project of similar n
 ------------------------------------------------------
 3. Download the respoitory.
 ------------------------------------------------------
-4. Open `discordBot.js` file and edit the file with your bot token and client Id [https://www.youtube.com/watch?v=mcsbmv7mZus](https://www.youtube.com/watch?v=mcsbmv7mZus). 
+4. Open `discordBot.js` file and edit the file with your bot token and client Id [https://www.youtube.com/watch?v=mcsbmv7mZus](https://www.youtube.com/watch?v=mcsbmv7mZus) (You may get the client Id from oauth section). 
 ------------------------------------------------------
-4. Go into the folder downloaded and open terminal(right click).
+4. Go into the downloaded folder and open terminal(right click).
 ------------------------------------------------------
 5. Run npm i ws bytebuffer node-fetch discord.js in the terminal.
 ------------------------------------------------------
 6. Finnaly do node discordBot.js in terminal.
+------------------------------------------------------
