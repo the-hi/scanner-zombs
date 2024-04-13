@@ -7,3 +7,20 @@ Zombs.io Server Scanner is a project that automates the process of entering a se
 # Why the project was started
 
 Creating a project called Server Scanner is a response to a project of similar nature created by an individual known as "serplent." This undertaking serves as a way to showcase superior coding capabilities and attention to detail. By developing a reliable, efficient, and well-structured server scanner, the aim is to demonstrate the contrast in quality between the two projects and prove that serplent lacks the technical proficiency to deliver a polished and effective tool. This retaliation through a competing project not only highlights the technical deficiencies of serplent's project but also emphasizes the importance of clean, maintainable code and proper project management in software development.
+
+# Steps to run the program
+------------------------------------------------------
+1. Install and setup `Node.js`: [https://nodejs.org/dist/v18.16.1/node-v18.16.1-x64.msi](https://nodejs.org/dist/v18.16.1/node-v18.16.1-x64.msi)
+[!] If your antivirus flags it, disable it and try it again.
+------------------------------------------------------
+2. Install and setup `Visual Studio Code`: [https://code.visualstudio.com/Download](https://code.visualstudio.com/Download)
+------------------------------------------------------
+3. Download the respoitory.
+------------------------------------------------------
+4. Open `discordBot.js` file and edit the file with your bot token and client Id [https://www.youtube.com/watch?v=mcsbmv7mZus](https://www.youtube.com/watch?v=mcsbmv7mZus). 
+------------------------------------------------------
+4. Go into the folder downloaded and open terminal(right click).
+------------------------------------------------------
+5. Run npm i ws bytebuffer node-fetch discord.js in the terminal.
+------------------------------------------------------
+6. Finnaly do node discordBot.js in terminal.
