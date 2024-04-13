@@ -15,7 +15,7 @@ Creating a project called Server Scanner is a response to a project of similar n
 ------------------------------------------------------
 2. Install and setup `Visual Studio Code`: [https://code.visualstudio.com/Download](https://code.visualstudio.com/Download)
 ------------------------------------------------------
-3. Download the respoitory.
+3. Download the repository.
 ------------------------------------------------------
 4. Open `discordBot.js` file and edit the file with your bot token and client Id [https://www.youtube.com/watch?v=mcsbmv7mZus](https://www.youtube.com/watch?v=mcsbmv7mZus) (You may get the client Id from oauth section). 
 ------------------------------------------------------
@@ -23,5 +23,5 @@ Creating a project called Server Scanner is a response to a project of similar n
 ------------------------------------------------------
 5. Run "npm i ws bytebuffer node-fetch discord.js" in the terminal(Only if u have issues with step 6.).
 ------------------------------------------------------
-6. Finnaly run "node discordBot.js" in terminal.
+6. Finally run "node discordBot.js" in terminal.
 ------------------------------------------------------
