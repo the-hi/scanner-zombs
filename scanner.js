@@ -85,7 +85,7 @@ const scanGame = (interval = 2000) => {
 scanGame();
 setInterval(() => {
     scanGame();
-}, 120000)
+}, 240000)
 // end of scanner code
 
 export { LeaderBoard, servers };

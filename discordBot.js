@@ -9,8 +9,8 @@ const client = new Client({
 });
 // UPDATE THIS PLSSS
 const config = {
-    TOKEN: "",
-    CLIENT_ID: "1228253401016565851"
+    TOKEN: "token here",
+    CLIENT_ID: "client id here"
 }
 
 const rest = new REST({ version: '10' }).setToken(config.TOKEN);
@@ -54,7 +54,7 @@ client.on("interactionCreate", async int => {
             if (LeaderBoard.has(options)) {
                 const embed = new EmbedBuilder();
                 const embedContent = [];
-                embed.setColor(0x0099FF);
+                embed.setColor(Math.random() * 16777216 | 0);
                 embed.setAuthor({ name: 'The_hi.', iconURL: 'https://cdn.discordapp.com/avatars/716532384631226408/0680fa664b24818b8911c0b6fa360eab.webp?size=32' })
                 embed.setTitle(`${servers[options].name} (${options}), Population - ${LeaderBoard.get(options).pop}${LeaderBoard.get(options).isFull ? "[FULL]" : ""}, ServerUptime: ${LeaderBoard.get(options).serverAge}days`);
                 LeaderBoard.get(options).lb.forEach(e => {
