@@ -9,8 +9,8 @@ const client = new Client({
 });
 // UPDATE THIS PLSSS
 const config = {
-    TOKEN: "token here",
-    CLIENT_ID: "client id here"
+    TOKEN: "MTIyODI1MzQwMTAxNjU2NTg1MQ.Gbt34O.z-6oviYUbccvtX0HSAO44QO9krF645z-OW-lhc",
+    CLIENT_ID: "1228253401016565851"
 }
 
 const rest = new REST({ version: '10' }).setToken(config.TOKEN);
@@ -40,6 +40,7 @@ const commands = [
         description: 'Find game stats',
     }
 ];
+
 try {
     await rest.put(Routes.applicationCommands(config.CLIENT_ID), { body: commands });
     console.log('(/) commands. Active');
@@ -47,16 +48,20 @@ try {
     console.error("There's something wrong", error);
 }
 
+const buildEmbed = (title) => {
+    return new EmbedBuilder()
+        .setTitle(title)
+        .setColor(Math.random() * 16777216 | 0)
+        .setAuthor({ name: 'The_hi.', iconURL: 'https://cdn.discordapp.com/avatars/716532384631226408/0680fa664b24818b8911c0b6fa360eab.webp?size=32' })
+}
+
 client.on("interactionCreate", async int => {
     const options = int?.options?._hoistedOptions[0]?.value;
     switch (int.commandName) {
         case "scan":
             if (LeaderBoard.has(options)) {
-                const embed = new EmbedBuilder();
                 const embedContent = [];
-                embed.setColor(Math.random() * 16777216 | 0);
-                embed.setAuthor({ name: 'The_hi.', iconURL: 'https://cdn.discordapp.com/avatars/716532384631226408/0680fa664b24818b8911c0b6fa360eab.webp?size=32' })
-                embed.setTitle(`${servers[options].name} (${options}), Population - ${LeaderBoard.get(options).pop}${LeaderBoard.get(options).isFull ? "[FULL]" : ""}, ServerUptime: ${LeaderBoard.get(options).serverAge}days`);
+                const embed = buildEmbed(`${servers[options].name} (${options}), Population - ${LeaderBoard.get(options).pop}${LeaderBoard.get(options).isFull ? "[FULL]" : ""}, ServerUptime: ${LeaderBoard.get(options).serverAge}days`);
                 LeaderBoard.get(options).lb.forEach(e => {
                     embedContent.push({ name: `[${e.uid}] ${e.name}`, value: `Rank: ${LeaderBoard.get(options).lb.indexOf(e) + 1},\nWave: ${e.wave.toLocaleString()},\n Score: ${e.score.toLocaleString()}.`, inline: true });
                 })
@@ -70,10 +75,7 @@ client.on("interactionCreate", async int => {
             await int.reply({ content: 'Invalid server id try again with a valid server id.', ephemeral: true });
             break;
         case "stats":
-            const statEmbed = new EmbedBuilder();
-            statEmbed.setColor(Math.random() * 16777216 | 0);
-            statEmbed.setAuthor({ name: 'The_hi.', iconURL: 'https://cdn.discordapp.com/avatars/716532384631226408/0680fa664b24818b8911c0b6fa360eab.webp?size=32' })
-            statEmbed.setTitle(`Zombs server stats`);
+            const statEmbed = buildEmbed(`Zombs server stats`);
             const serverPopulations = { full: 0, high: 0, medium: 0, low: 0, currentPopulation: 0, totalPopulation: Object.keys(servers).length * 32 };
             LeaderBoard.forEach(server => {
                 server.pop < 10 && ++serverPopulations.low;
@@ -89,6 +91,7 @@ client.on("interactionCreate", async int => {
                 serverPopulations[servers[server.id].region].servers++;
                 serverPopulations[servers[server.id].region].population += server.pop;
             });
+            // msg
             const { full, high, medium, low, currentPopulation, totalPopulation } = serverPopulations;
             const fields = [{ name: `Server stats`, value: `Total population: ${totalPopulation},\nCurrent population: ${currentPopulation},\nFull servers: ${full},\nHigh servers: ${high},\nMedium servers: ${medium},\n Low servers: ${low}`, inline: true }]
             for (const region of ["US East", "Europe", "US West", "Asia", "Australia", "South America"]) {
@@ -100,23 +103,11 @@ client.on("interactionCreate", async int => {
         case "highestwave":
             const lb = [];
             const embedMessages = [];
-            LeaderBoard.forEach(server => {
-                server.lb.forEach(lbIndex => {
-                    if (lbIndex.wave >= parseInt(options)) {
-                        lbIndex = { ...lbIndex, serverId: server.id, isFull: server.isFull, population: server.pop }
-                        lb.push(lbIndex);
-                    }
-                })
-            })
-            const sortedLb = lb.sort((a, b) => {
-                return b.wave - a.wave
-            });
+            LeaderBoard.forEach(server => server.lb.forEach(lbIndex => lbIndex.wave >= parseInt(options) && (lbIndex = { ...lbIndex, serverId: server.id, isFull: server.isFull, population: server.pop }, lb.push(lbIndex))))
+            const sortedLb = lb.sort((a, b) => b.wave - a.wave);
             for (let i = 0; i < sortedLb.length; i += 20) {
-                const embed = new EmbedBuilder();
                 const embedContent = [];
-                embed.setColor(Math.random() * 16777216 | 0);
-                embed.setAuthor({ name: 'The_hi.', iconURL: 'https://cdn.discordapp.com/avatars/716532384631226408/0680fa664b24818b8911c0b6fa360eab.webp?size=32' })
-                embed.setTitle(`Highest waves above wave ${options}, Results: ${sortedLb.length}`)
+                const embed = buildEmbed(`Highest waves above wave ${options}, Results: ${sortedLb.length}`)
                 for (let index = i; index < Math.min(sortedLb.length, i + 20); index++) {
                     const { name, wave, score, isFull, serverId, population } = sortedLb[index];
                     embedContent.push({ name: `**${name} (${serverId})${isFull ? "[FULL]" : ""}, Population: ${population}**`, value: `**[Link](https://zombs.io/#/${serverId}) Wave: ${wave.toLocaleString()}, Score - ${score.toLocaleString()}**` })
@@ -129,27 +120,15 @@ client.on("interactionCreate", async int => {
             })
             break;
         case "highestscore":
-            const scoreLb = [];
             const embeds = [];
-            LeaderBoard.forEach(server => {
-                server.lb.forEach(lbIndex => {
-                    if (lbIndex.score >= parseInt(options)) {
-                        lbIndex = { ...lbIndex, serverId: server.id, isFull: server.isFull, population: server.pop }
-                        scoreLb.push(lbIndex);
-                    }
-                })
-            })
-            const sortedScoreLb = scoreLb.sort((a, b) => {
-                return b.score - a.score
-            });
+            const scoreLb = [];
+            LeaderBoard.forEach(server => server.lb.forEach(lbIndex => lbIndex.score >= parseInt(options) && (lbIndex = { ...lbIndex, serverId: server.id, isFull: server.isFull, population: server.pop }, scoreLb.push(lbIndex))))
+            const sortedScoreLb = scoreLb.sort((a, b) => b.score - a.score);
             for (let i = 0; i < sortedScoreLb.length; i += 20) {
-                const embed = new EmbedBuilder();
                 const embedContent = [];
-                embed.setColor(Math.random() * 16777216 | 0);
-                embed.setAuthor({ name: 'The_hi.', iconURL: 'https://cdn.discordapp.com/avatars/716532384631226408/0680fa664b24818b8911c0b6fa360eab.webp?size=32' })
-                embed.setTitle(`Highest scores above score ${options}, Results: ${sortedScoreLb.length}`)
+                const embed = buildEmbed(`Highest scores above score ${options}, Results: ${sortedScoreLb.length}`)
                 for (let index = i; index < Math.min(sortedScoreLb.length, i + 20); index++) {
-                    const { name, wave, score, isFull, serverId, population } = sortedLb[index];
+                    const { name, wave, score, isFull, serverId, population } = sortedScoreLb[index];
                     embedContent.push({ name: `**${name} (${serverId})${isFull ? "[FULL]" : ""}, Population: ${population}**`, value: `**[Link](https://zombs.io/#/${serverId}) Wave: ${wave.toLocaleString()}, Score - ${score.toLocaleString()}**` })
                 }
                 embed.addFields(embedContent);
@@ -160,25 +139,13 @@ client.on("interactionCreate", async int => {
             })
             break;
         case "find":
+            const nameEmbeds = [];
             const playersWithName = [];
-            const nameEmbeds = []
-            LeaderBoard.forEach(server => {
-                server.lb.forEach(lbIndex => {
-                    if (lbIndex.name.includes(options)) {
-                        lbIndex = { ...lbIndex, serverId: server.id, isFull: server.isFull, population: server.pop }
-                        playersWithName.push(lbIndex);
-                    }
-                })
-            })
-            const sortedNameLb = playersWithName.sort((a, b) => {
-                return b.wave - a.wave
-            });
+            LeaderBoard.forEach(server => server.lb.forEach(lbIndex => lbIndex.name.includes(options) && (lbIndex = { ...lbIndex, serverId: server.id, isFull: server.isFull, population: server.pop }, playersWithName.push(lbIndex))))
+            const sortedNameLb = playersWithName.sort((a, b) => b.wave - a.wave);
             for (let i = 0; i < sortedNameLb.length; i += 20) {
-                const embed = new EmbedBuilder();
                 const embedContent = [];
-                embed.setColor(Math.random() * 16777216 | 0);
-                embed.setAuthor({ name: 'The_hi.', iconURL: 'https://cdn.discordapp.com/avatars/716532384631226408/0680fa664b24818b8911c0b6fa360eab.webp?size=32' })
-                embed.setTitle(`Players with name ${options}, Results: ${sortedNameLb.length}`)
+                const embed = buildEmbed(`Players with name ${options}, Results: ${sortedNameLb.length}`)
                 for (let index = i; index < Math.min(sortedNameLb.length, i + 20); index++) {
                     const { name, wave, score, isFull, serverId, population } = sortedNameLb[index];
                     embedContent.push({ name: `**${name} (${serverId})${isFull ? "[FULL]" : ""}, Population: ${population}**`, value: `**[Link](https://zombs.io/#/${serverId}) Wave: ${wave.toLocaleString()}, Score - ${score.toLocaleString()}**` })
