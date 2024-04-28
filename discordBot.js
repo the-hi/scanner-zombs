@@ -9,8 +9,8 @@ const client = new Client({
 });
 // UPDATE THIS PLSSS
 const config = {
-    TOKEN: "MTIyODI1MzQwMTAxNjU2NTg1MQ.Gbt34O.z-6oviYUbccvtX0HSAO44QO9krF645z-OW-lhc",
-    CLIENT_ID: "1228253401016565851"
+    TOKEN: "",
+    CLIENT_ID: ""
 }
 
 const rest = new REST({ version: '10' }).setToken(config.TOKEN);
