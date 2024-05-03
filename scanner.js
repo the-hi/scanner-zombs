@@ -32,7 +32,8 @@ class Scanner {
     }
     onEnterWorld(data) {
         LeaderBoard.get(this.server).pop = data.players;
-        LeaderBoard.get(this.server).serverAge = Math.round(data.startingTick * 20 / 1000 / 60 / 60 / 24);
+        LeaderBoard.get(this.server).serverAge = (data.startingTick * 50 / 1000 / 60 / 60 / 24).toFixed(2);
+        
         if (!data.allowed) {
             LeaderBoard.get(this.server).isFull = true;
         }
