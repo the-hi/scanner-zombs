@@ -23,4 +23,5 @@ const highestScore = (interaction, options) => {
         embeds.indexOf(embed) === 0 ? await interaction.reply({ embeds: [embed] }) : await interaction.channel.send({ embeds: [embed] })
     })
 }
+console.log('HighestScore command loaded.')
 export { highestScore };

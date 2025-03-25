@@ -16,4 +16,5 @@ const fullCommand = async (interaction) => {
     filledServerEmbed.addFields(filledServers);
     interaction.reply({ embeds: [filledServerEmbed] })
 }
+console.log('Filled server command loaded.')
 export { fullCommand };

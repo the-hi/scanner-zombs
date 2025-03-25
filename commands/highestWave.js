@@ -23,4 +23,5 @@ const highestWave = (interaction, options) => {
         embedMessages.indexOf(embed) === 0 ? await interaction.reply({ embeds: [embed] }) : await interaction.channel.send({ embeds: [embed] })
     })
 }
+console.log('HighestWave command loaded.')
 export { highestWave };

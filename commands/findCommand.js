@@ -23,4 +23,5 @@ const findCommand = (interaction, options) => {
         nameEmbeds.indexOf(embed) === 0 ? await interaction.reply({ embeds: [embed] }) : await interaction.channel.send({ embeds: [embed] })
     })
 }
+console.log('Find command loaded.')
 export { findCommand };

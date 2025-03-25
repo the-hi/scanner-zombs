@@ -31,4 +31,5 @@ const statsCommand = async (interaction) => {
     statEmbed.addFields(fields);
     interaction.reply({ embeds: [statEmbed] })
 }
+console.log('Stats command loaded.')
 export { statsCommand };

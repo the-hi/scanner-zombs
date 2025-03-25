@@ -1,4 +1,5 @@
 import { config } from './config.js'
+import { createMap } from './commands/serverLayout.js';
 import { highestWave } from './commands/highestWave.js';
 import { scanCommand } from './commands/scanCommand.js';
 import { findCommand } from './commands/findCommand.js';
@@ -6,6 +7,7 @@ import { fullCommand } from './commands/fullCommand.js';
 import { statsCommand } from './commands/statsCommand.js';
 import { highestScore } from './commands/highestScore.js';
 import { REST, Routes, Client, GatewayIntentBits } from 'discord.js';
+
 const client = new Client({
     intents: [
         GatewayIntentBits.DirectMessages,
@@ -34,6 +36,11 @@ const commands = [
         name: 'find',
         description: 'Find players that have the name inputed. find [name]',
         options: [{ name: "playername", description: "Enter player name", type: 3, required: true }]
+    },
+    {
+        name: 'layout',
+        description: 'Get layout of any server. layout [serverId]',
+        options: [{ name: "serverid", description: "Enter Server id", type: 3, required: true }]
     },
     {
         name: 'full',
@@ -72,6 +79,9 @@ client.on("interactionCreate", async int => {
             break;
         case "full":
             fullCommand(int)
+            break;
+        case "layout":
+            createMap(options, int)
             break;
     }
 })

@@ -19,4 +19,5 @@ const scanCommand = async (interaction, options) => {
         await interaction.reply({ content: 'Server has not been scanned yet... try again after some time', ephemeral: true });
     }
 }
+console.log('Scan command loaded.')
 export { scanCommand };

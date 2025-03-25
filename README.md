@@ -21,7 +21,7 @@ Creating a project called Server Scanner is a response to a project of similar n
 ------------------------------------------------------
 4. Go into the downloaded folder and open terminal(right click).
 ------------------------------------------------------
-5. Run "npm i ws bytebuffer node-fetch discord.js" in the terminal(Only if u have issues with step 6.).
+5. Run "npm i ws bytebuffer node-fetch discord.js jimp fs" in the terminal(Only if u have issues with step 6.).
 ------------------------------------------------------
 6. Finally run "node discordBot.js" in terminal.
 ------------------------------------------------------
