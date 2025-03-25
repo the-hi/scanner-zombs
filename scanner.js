@@ -10,7 +10,6 @@ for (let i in servers) {
 }
 class Scanner {
     constructor(server) {
-        console.log(servers[server])
         this.server = server;
         this.hostname = servers[server].hostname;
         this.ipAddress = servers[server].ipAddress;
@@ -31,14 +30,15 @@ class Scanner {
         }
     }
     onEnterWorld(data) {
-        LeaderBoard.get(this.server).pop = data.players - 1;
+        LeaderBoard.get(this.server).pop = data.allowed ? (data.players - 1) : data.players;
         LeaderBoard.get(this.server).serverAge = (data.startingTick * 50 / 1000 / 60 / 60 / 24).toFixed(2);
 
         if (!data.allowed) {
             LeaderBoard.get(this.server).isFull = true;
+            return;
         }
-        if (!data.allowed) return;
         LeaderBoard.get(this.server).isFull = false;
+        LeaderBoard.get(this.server).lastScanned = Date.now();
         //opcode 6
         this.enterworld2 && this.ws.send(this.enterworld2);
         //packets to load lb

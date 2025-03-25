@@ -97,10 +97,6 @@ class BinCodec {
         console.log(JSON.stringify(Array.from(new Uint8Array(buffer.buffer))))
         this.startedDecoding = Date.now();
 
-        //for (let i = 0; i < 33554432; i++) {
-        //    Module_.HEAPU8[i] = HEAPU83[i];
-        //}
-
         Module_._MakeBlendField(24, 132)
         for (let firstSync = Module_._MakeBlendField(228, 132), i = 0; buffer.remaining();)
             Module_.HEAPU8[firstSync + i] = buffer.readUint8(), i++;

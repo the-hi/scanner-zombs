@@ -2,6 +2,7 @@ import { config } from './config.js'
 import { highestWave } from './commands/highestWave.js';
 import { scanCommand } from './commands/scanCommand.js';
 import { findCommand } from './commands/findCommand.js';
+import { fullCommand } from './commands/fullCommand.js';
 import { statsCommand } from './commands/statsCommand.js';
 import { highestScore } from './commands/highestScore.js';
 import { REST, Routes, Client, GatewayIntentBits } from 'discord.js';
@@ -35,6 +36,10 @@ const commands = [
         options: [{ name: "playername", description: "Enter player name", type: 3, required: true }]
     },
     {
+        name: 'full',
+        description: 'List of filled servers',
+    },
+    {
         name: 'stats',
         description: 'Find game stats',
     }
@@ -47,13 +52,10 @@ try {
     console.error("There's something wrong", error);
 }
 
-
-
 client.on("interactionCreate", async int => {
     const options = int?.options?._hoistedOptions[0]?.value;
     switch (int.commandName) {
         case "scan":
-            console.log(int)
             scanCommand(int, options);
             break;
         case "stats":
@@ -67,6 +69,9 @@ client.on("interactionCreate", async int => {
             break;
         case "find":
             findCommand(int, options)
+            break;
+        case "full":
+            fullCommand(int)
             break;
     }
 })

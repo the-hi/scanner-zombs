@@ -3,8 +3,8 @@ import fs from 'fs'
 let wasmbuffers;
 fs.readFile('./zombs_wasm.wasm', (err, data) => {
     wasmbuffers = data;
-    console.log(data)
 })
+
 const wasmmodule = () => {
     let uid = 0;
     function setHeaps() {
