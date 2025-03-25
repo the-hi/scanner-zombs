@@ -11,7 +11,10 @@ const highestWave = (interaction, options) => {
         const embed = buildEmbed(`Highest waves above wave ${options}, Results: ${sortedLb.length}`, interaction)
         for (let index = i; index < Math.min(sortedLb.length, i + 20); index++) {
             const { name, wave, score, isFull, serverId, population } = sortedLb[index];
-            embedContent.push({ name: `**${name} (${serverId})${isFull ? "[FULL]" : ""}, Population: ${population}**`, value: `**[Link](https://zombs.io/#/${serverId}) Wave: ${wave.toLocaleString()}, Score - ${score.toLocaleString()}**` })
+            embedContent.push({
+                name: `**${name} (${serverId})${isFull ? "[FULL]" : ""}, Population: ${population}**`,
+                value: `**[Link](https://zombs.io/#/${serverId}) Wave: ${wave.toLocaleString()}, Score - ${score.toLocaleString()}**`
+            })
         }
         embed.addFields(embedContent);
         embedMessages.push(embed);

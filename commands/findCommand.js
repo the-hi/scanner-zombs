@@ -11,7 +11,10 @@ const findCommand = (interaction, options) => {
         const embed = buildEmbed(`Players with name ${options}, Results: ${sortedNameLb.length}`, interaction)
         for (let index = i; index < Math.min(sortedNameLb.length, i + 20); index++) {
             const { name, wave, score, isFull, serverId, population } = sortedNameLb[index];
-            embedContent.push({ name: `**${name} (${serverId})${isFull ? "[FULL]" : ""}, Population: ${population}**`, value: `**[Link](https://zombs.io/#/${serverId}) Wave: ${wave.toLocaleString()}, Score - ${score.toLocaleString()}**` })
+            embedContent.push({
+                name: `**${name} (${serverId})${isFull ? "[FULL]" : ""}, Population: ${population}**`,
+                value: `**[Link](https://zombs.io/#/${serverId}) Wave: ${wave.toLocaleString()}, Score - ${score.toLocaleString()}**`
+            })
         }
         embed.addFields(embedContent);
         nameEmbeds.push(embed);

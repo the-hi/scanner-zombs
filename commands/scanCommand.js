@@ -9,7 +9,7 @@ const scanCommand = async (interaction, options) => {
         LeaderBoard.get(options).lb.forEach(e => {
             embedContent.push({
                 name: `[${e.uid}] ${e.name}`,
-                value: `Rank: ${LeaderBoard.get(options).lb.indexOf(e) + 1},\nWave: ${e.wave.toLocaleString()},\n Score: ${e.score.toLocaleString()}.`,
+                value: `Rank: ${LeaderBoard.get(options).lb.indexOf(e) + 1},\nWave: ${e.wave.toLocaleString()},\n Score: ${e.score.toLocaleString()}`,
                 inline: true
             });
         })
