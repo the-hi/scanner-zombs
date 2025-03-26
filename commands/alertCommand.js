@@ -24,7 +24,7 @@ const alertCommand = (interaction, options) => {
             userId: userId,
             interaction: interaction,
         };
-        const successEmbed = buildEmbed("Alert has been successfully set.", interaction, '#88E788');
+        const successEmbed = buildEmbed("Alert has been set successfully.", interaction, '#88E788');
         interaction.reply({ embeds: [successEmbed] })
     } else {
         const failedEmbed = buildEmbed("You have too many alerts already.", interaction, '#FF0000');
