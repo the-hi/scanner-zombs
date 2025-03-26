@@ -1,15 +1,21 @@
 import { config } from '../config.js'
+import { servers } from '../scanner.js'
 import { buildEmbed } from './buildEmbed.js';
 
 const alertCommand = (interaction, options) => {
     const userId = interaction.user.id;
     const serverId = options[0].value;
     const threshold = options[1].value;
-
+    // if the input is invalid
+    if (!servers[serverId]) {
+        const failedEmbed = buildEmbed("Enter a valid serverId.", interaction, '#FF0000');
+        return interaction.reply({ embeds: [failedEmbed] })
+    }
+    // if it is valid
     if (!config.userAlters[userId]) config.userAlters[userId] = {};
     if (Object.keys(config.userAlters[userId]).length < 6) {
         if (threshold > 32 || threshold < 0) {
-            const failedEmbed = buildEmbed("Enter a threshold value between 0 and 32.", interaction);
+            const failedEmbed = buildEmbed("Enter a threshold value between 0 and 32.", interaction, '#FF0000');
             return interaction.reply({ embeds: [failedEmbed] })
         }
         config.userAlters[userId][serverId] = {
@@ -18,10 +24,10 @@ const alertCommand = (interaction, options) => {
             userId: userId,
             interaction: interaction,
         };
-        const successEmbed = buildEmbed("Alert has been successfully set.", interaction);
+        const successEmbed = buildEmbed("Alert has been successfully set.", interaction, '#88E788');
         interaction.reply({ embeds: [successEmbed] })
     } else {
-        const failedEmbed = buildEmbed("You have too many alerts already.", interaction);
+        const failedEmbed = buildEmbed("You have too many alerts already.", interaction, '#FF0000');
         interaction.reply({ embeds: [failedEmbed] })
     }
 }

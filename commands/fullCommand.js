@@ -9,7 +9,6 @@ const fullCommand = async (interaction) => {
             filledServers.push({
                 name: server.id,
                 value: `Population: ${server.pop}, Leaderboard ` + (server.lb.length !== 0 ? "available!" : "not available:sob:."),
-                inline: true
             })
         }
     });
@@ -17,5 +16,4 @@ const fullCommand = async (interaction) => {
     filledServerEmbed.addFields(filledServers);
     interaction.reply({ embeds: [filledServerEmbed] })
 }
-console.log('Filled server command loaded.')
 export { fullCommand };

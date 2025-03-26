@@ -1,14 +1,16 @@
 import { config } from './config.js'
+import { getStatus } from './commands/getStatus.js';
 import { createMap } from './commands/serverLayout.js';
 import { highestWave } from './commands/highestWave.js';
 import { scanCommand } from './commands/scanCommand.js';
 import { findCommand } from './commands/findCommand.js';
 import { fullCommand } from './commands/fullCommand.js';
+import { removeAlert } from './commands/removeAlert.js';
 import { statsCommand } from './commands/statsCommand.js';
 import { alertCommand } from './commands/alertCommand.js';
 import { highestScore } from './commands/highestScore.js';
 import { changeInterval } from './commands/changeInterval.js';
-import { REST, Routes, Client, GatewayIntentBits } from 'discord.js';
+import { REST, Routes, Client, GatewayIntentBits, PresenceUpdateStatus } from 'discord.js';
 
 const client = new Client({
     intents: [
@@ -17,6 +19,17 @@ const client = new Client({
     ]
 });
 
+client.once('ready', () => {
+    console.log(`Logged in as ${client.user.tag}`);
+
+    client.user.setPresence({
+        activities: [{ name: 'jking is gay.' }],
+        status: PresenceUpdateStatus.DoNotDisturb
+    });
+    client.user.setAvatar('https://cdn.discordapp.com/avatars/1284523392850071636/ef5a9ed7c007f1671301bc3464dc4ab2.webp?size=512')
+});
+
+const clientUptime = Date.now();
 const rest = new REST({ version: '10' }).setToken(config.TOKEN);
 const commands = [
     {
@@ -61,7 +74,16 @@ const commands = [
         name: 'alert',
         description: 'get alerts when server pop reaches a threshold, alter [serverId] [threshold pop]',
         options: [{ name: "serverid", description: "Enter serverId", type: 3, required: true }, { name: "threshold", description: "Enter threshold", type: 3, required: true }]
-    }
+    },
+    {
+        name: 'removealert',
+        description: "remove alerts that you've set, removealter [serverId, deletes all alerts if serverId absent]",
+        options: [{ name: "serverid", description: "Enter serverId", type: 3, required: false }]
+    },
+    {
+        name: 'status',
+        description: "Get status of the bot.",
+    },
 ];
 
 try {
@@ -81,19 +103,19 @@ client.on("interactionCreate", async int => {
             statsCommand(int);
             break;
         case "highestwave":
-            highestWave(int, options[0]?.value)
+            highestWave(int, options[0]?.value);
             break;
         case "highestscore":
-            highestScore(int, options[0]?.value)
+            highestScore(int, options[0]?.value);
             break;
         case "find":
-            findCommand(int, options[0]?.value)
+            findCommand(int, options[0]?.value);
             break;
         case "full":
-            fullCommand(int)
+            fullCommand(int);
             break;
         case "layout":
-            createMap(int, options[0]?.value)
+            createMap(int, options[0]?.value);
             break;
         case "changeinterval":
             changeInterval(int, options[0].value);
@@ -101,9 +123,15 @@ client.on("interactionCreate", async int => {
         case "alert":
             alertCommand(int, options);
             break;
+        case "removealert":
+            removeAlert(int, options);
+            break;
+        case "status":
+            getStatus(int, options);
+            break;
     }
 })
 
 client.login(config.TOKEN);
 
-export { client };
+export { client, clientUptime };

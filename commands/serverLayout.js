@@ -84,7 +84,7 @@ fetch("https://zombs-server-spots.glitch.me/serverspots.js").then(e => e.text())
         delete spotsJSON[server].spotEncoded;
     }
     serverSpots = spotsJSON;
-    console.log('Server spots loaded.')
+    console.log('Server spots fetched.')
 })
 
 export { createMap };

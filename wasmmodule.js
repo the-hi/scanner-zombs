@@ -1,8 +1,12 @@
 import fs from 'fs'
+import { scanGame } from './scanner.js';
 
-let wasmbuffers;
+
+let wasmbuffers = [];
 fs.readFile('./zombs_wasm.wasm', (err, data) => {
     wasmbuffers = data;
+
+    scanGame();
 })
 
 const wasmmodule = () => {
