@@ -20,7 +20,7 @@ const findCommand = (interaction, options) => {
         nameEmbeds.push(embed);
     }
     nameEmbeds.forEach(async embed => {
-        nameEmbeds.indexOf(embed) === 0 ? await interaction.reply({ embeds: [embed] }) : await interaction.channel.send({ embeds: [embed] })
+        nameEmbeds.indexOf(embed) === 0 ? await interaction.reply({ embeds: [embed] }) : await interaction.followUp({ embeds: [embed] })
     })
 }
 console.log('Find command loaded.')

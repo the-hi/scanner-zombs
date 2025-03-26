@@ -5,7 +5,7 @@ const scanCommand = async (interaction, options) => {
     if (!LeaderBoard.has(options)) return interaction.reply({ content: 'Invalid server id try again with a valid server id.', ephemeral: true });
     if (LeaderBoard.has(options)) {
         const embedContent = [];
-        const embed = buildEmbed(`${servers[options].name} (${options}), Population - ${LeaderBoard.get(options).pop}${LeaderBoard.get(options).isFull ? "[FULL]" : ""}, ServerUptime: ${LeaderBoard.get(options).serverAge}days, LastScanned: ${((Date.now() - LeaderBoard.get(options).lastScanned) / 1000 / 60).toFixed(1)}minutes ago`, interaction);
+        const embed = buildEmbed(`${servers[options].name} (${options}), Pop - ${LeaderBoard.get(options).pop}${LeaderBoard.get(options).isFull ? "[FULL]" : ""}, Uptime: ${LeaderBoard.get(options).serverAge}d, LastScanned: ${((Date.now() - LeaderBoard.get(options).lastScanned) / 1000 / 60).toFixed(1)}m ago`, interaction);
         LeaderBoard.get(options).lb.forEach(e => {
             embedContent.push({
                 name: `[${e.uid}] ${e.name}`,

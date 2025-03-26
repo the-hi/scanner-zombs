@@ -5,7 +5,9 @@ import { scanCommand } from './commands/scanCommand.js';
 import { findCommand } from './commands/findCommand.js';
 import { fullCommand } from './commands/fullCommand.js';
 import { statsCommand } from './commands/statsCommand.js';
+import { alertCommand } from './commands/alterCommand.js';
 import { highestScore } from './commands/highestScore.js';
+import { changeInterval } from './commands/changeInterval.js';
 import { REST, Routes, Client, GatewayIntentBits } from 'discord.js';
 
 const client = new Client({
@@ -40,7 +42,7 @@ const commands = [
     {
         name: 'layout',
         description: 'Get layout of any server. layout [serverId]',
-        options: [{ name: "serverid", description: "Enter Server id", type: 3, required: true }]
+        options: [{ name: "serverid", description: "Enter serverId", type: 3, required: true }]
     },
     {
         name: 'full',
@@ -49,6 +51,16 @@ const commands = [
     {
         name: 'stats',
         description: 'Find game stats',
+    },
+    {
+        name: 'changeinterval',
+        description: 'modify time between scans, changeinterval [time in milliseconds]',
+        options: [{ name: "time", description: "Enter Interval", type: 3, required: true }]
+    },
+    {
+        name: 'alert',
+        description: 'get alerts when server pop reaches a threshold, alter [serverId] [threshold pop]',
+        options: [{ name: "serverid", description: "Enter serverId", type: 3, required: true }, { name: "threshold", description: "Enter threshold", type: 3, required: true }]
     }
 ];
 
@@ -60,30 +72,38 @@ try {
 }
 
 client.on("interactionCreate", async int => {
-    const options = int?.options?._hoistedOptions[0]?.value;
+    const options = int?.options?._hoistedOptions;
     switch (int.commandName) {
         case "scan":
-            scanCommand(int, options);
+            scanCommand(int, options[0]?.value);
             break;
         case "stats":
             statsCommand(int);
             break;
         case "highestwave":
-            highestWave(int, options)
+            highestWave(int, options[0]?.value)
             break;
         case "highestscore":
-            highestScore(int, options)
+            highestScore(int, options[0]?.value)
             break;
         case "find":
-            findCommand(int, options)
+            findCommand(int, options[0]?.value)
             break;
         case "full":
             fullCommand(int)
             break;
         case "layout":
-            createMap(options, int)
+            createMap(int, options[0]?.value)
+            break;
+        case "changeinterval":
+            changeInterval(int, options[0].value);
+            break;
+        case "alert":
+            alertCommand(int, options);
             break;
     }
 })
 
 client.login(config.TOKEN);
+
+export { client };
