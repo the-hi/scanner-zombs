@@ -1,4 +1,5 @@
 import { config } from '../config.js'
+import { buildEmbed } from './buildEmbed.js';
 
 const alertCommand = (interaction, options) => {
     const userId = interaction.user.id;
@@ -8,16 +9,20 @@ const alertCommand = (interaction, options) => {
     if (!config.userAlters[userId]) config.userAlters[userId] = {};
     if (Object.keys(config.userAlters[userId]).length < 6) {
         if (threshold > 32 || threshold < 0) {
-            return interaction.reply("Enter a threshold value between 0 and 32.")
+            const failedEmbed = buildEmbed("Enter a threshold value between 0 and 32.", interaction);
+            return interaction.reply({ embeds: [failedEmbed] })
         }
         config.userAlters[userId][serverId] = {
             serverId: serverId,
             threshold: threshold,
             userId: userId,
+            interaction: interaction,
         };
-        interaction.reply(":thumbsup:")
+        const successEmbed = buildEmbed("Alert has been successfully set.", interaction);
+        interaction.reply({ embeds: [successEmbed] })
     } else {
-        interaction.reply("You have too many alerts already.")
+        const failedEmbed = buildEmbed("You have too many alerts already.", interaction);
+        interaction.reply({ embeds: [failedEmbed] })
     }
 }
 export { alertCommand };

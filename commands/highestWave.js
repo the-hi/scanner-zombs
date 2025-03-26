@@ -1,9 +1,9 @@
 import { LeaderBoard } from '../scanner.js'
 import { buildEmbed } from './buildEmbed.js';
 
-const highestWave = (interaction, options) => {
+const highestWave = async (interaction, options) => {
     const lb = [];
-    const embedMessages = [];
+    const embeds = [];
     LeaderBoard.forEach(server => server.lb.forEach(lbIndex => lbIndex.wave >= parseInt(options) && (lbIndex = { ...lbIndex, serverId: server.id, isFull: server.isFull, population: server.pop }, lb.push(lbIndex))))
     const sortedLb = lb.sort((a, b) => b.wave - a.wave);
     for (let i = 0; i < sortedLb.length; i += 20) {
@@ -17,11 +17,10 @@ const highestWave = (interaction, options) => {
             })
         }
         embed.addFields(embedContent);
-        embedMessages.push(embed);
+        embeds.push(embed);
     }
-    embedMessages.forEach(async embed => {
-        embedMessages.indexOf(embed) === 0 ? await interaction.reply({ embeds: [embed] }) : await interaction.channel.send({ embeds: [embed] })
-    })
+    // send embeds.
+    await interaction.reply({ embeds: embeds })
 }
 console.log('HighestWave command loaded.')
 export { highestWave };

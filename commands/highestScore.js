@@ -1,7 +1,7 @@
 import { LeaderBoard } from '../scanner.js'
 import { buildEmbed } from './buildEmbed.js';
 
-const highestScore = (interaction, options) => {
+const highestScore = async (interaction, options) => {
     const embeds = [];
     const scoreLb = [];
     LeaderBoard.forEach(server => server.lb.forEach(lbIndex => lbIndex.score >= parseInt(options) && (lbIndex = { ...lbIndex, serverId: server.id, isFull: server.isFull, population: server.pop }, scoreLb.push(lbIndex))))
@@ -19,9 +19,8 @@ const highestScore = (interaction, options) => {
         embed.addFields(embedContent);
         embeds.push(embed);
     }
-    embeds.forEach(async embed => {
-        embeds.indexOf(embed) === 0 ? await interaction.reply({ embeds: [embed] }) : await interaction.channel.send({ embeds: [embed] })
-    })
+    // send embeds
+    await interaction.reply({ embeds: embeds })
 }
 console.log('HighestScore command loaded.')
 export { highestScore };

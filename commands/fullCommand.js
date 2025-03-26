@@ -1,5 +1,6 @@
+import { LeaderBoard } from '../scanner.js';
 import { buildEmbed } from './buildEmbed.js';
-import { LeaderBoard } from '../scanner.js'
+
 const fullCommand = async (interaction) => {
     const filledServers = [];
     const filledServerEmbed = buildEmbed(`Filled servers list`, interaction);

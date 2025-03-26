@@ -1,8 +1,8 @@
 import { LeaderBoard } from '../scanner.js'
 import { buildEmbed } from './buildEmbed.js';
 
-const findCommand = (interaction, options) => {
-    const nameEmbeds = [];
+const findCommand = async (interaction, options) => {
+    const embeds = [];
     const playersWithName = [];
     LeaderBoard.forEach(server => server.lb.forEach(lbIndex => lbIndex.name.includes(options) && (lbIndex = { ...lbIndex, serverId: server.id, isFull: server.isFull, population: server.pop }, playersWithName.push(lbIndex))))
     const sortedNameLb = playersWithName.sort((a, b) => b.wave - a.wave);
@@ -17,11 +17,10 @@ const findCommand = (interaction, options) => {
             })
         }
         embed.addFields(embedContent);
-        nameEmbeds.push(embed);
+        embeds.push(embed);
     }
-    nameEmbeds.forEach(async embed => {
-        nameEmbeds.indexOf(embed) === 0 ? await interaction.reply({ embeds: [embed] }) : await interaction.followUp({ embeds: [embed] })
-    })
+    // send embeds.
+    await interaction.reply({ embeds: embeds })
 }
 console.log('Find command loaded.')
 export { findCommand };

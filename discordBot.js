@@ -5,7 +5,7 @@ import { scanCommand } from './commands/scanCommand.js';
 import { findCommand } from './commands/findCommand.js';
 import { fullCommand } from './commands/fullCommand.js';
 import { statsCommand } from './commands/statsCommand.js';
-import { alertCommand } from './commands/alterCommand.js';
+import { alertCommand } from './commands/alertCommand.js';
 import { highestScore } from './commands/highestScore.js';
 import { changeInterval } from './commands/changeInterval.js';
 import { REST, Routes, Client, GatewayIntentBits } from 'discord.js';
