@@ -12,13 +12,13 @@ const alertCommand = (interaction, options) => {
         return interaction.reply({ embeds: [failedEmbed] })
     }
     // if it is valid
-    if (!config.userAlters[userId]) config.userAlters[userId] = {};
-    if (Object.keys(config.userAlters[userId]).length < 6) {
+    if (!config.userAlerts[userId]) config.userAlerts[userId] = {};
+    if (Object.keys(config.userAlerts[userId]).length < 6) {
         if (threshold > 32 || threshold < 0) {
             const failedEmbed = buildEmbed("Enter a threshold value between 0 and 32.", interaction, '#FF0000');
             return interaction.reply({ embeds: [failedEmbed] })
         }
-        config.userAlters[userId][serverId] = {
+        config.userAlerts[userId][serverId] = {
             serverId: serverId,
             threshold: threshold,
             userId: userId,

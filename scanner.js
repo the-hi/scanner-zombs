@@ -40,8 +40,8 @@ class Scanner {
         server.pop = data.players;
         server.serverAge = (data.startingTick * 50 / 1000 / 60 / 60 / 24).toFixed(2);
 
-        for (const users in config.userAlters) {
-            const user = config.userAlters[users];
+        for (const users in config.userAlerts) {
+            const user = config.userAlerts[users];
             if (user[this.server] && server.pop >= parseInt(user[this.server].threshold)) {
                 const discord = client.users.cache.get(user[this.server].userId);
                 const embed1 = buildEmbed(`${this.server} has surpassed the threshold you've set. Current population: ${server.pop}`, user[this.server].interaction, '#88E788')
