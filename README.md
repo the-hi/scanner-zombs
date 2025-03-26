@@ -17,7 +17,7 @@ Creating a project called Server Scanner is a response to a project of similar n
 ------------------------------------------------------
 3. Download the repository.
 ------------------------------------------------------
-4. Open `discordBot.js` file and edit the file with your bot token and client Id [https://www.youtube.com/watch?v=mcsbmv7mZus](https://www.youtube.com/watch?v=mcsbmv7mZus) (You may get the client Id from oauth section). 
+4. Open `config.js` file and edit the file with your bot token, bot client id, your discord user id [https://www.youtube.com/watch?v=mcsbmv7mZus](https://www.youtube.com/watch?v=mcsbmv7mZus) (You may get the client Id from oauth section). 
 ------------------------------------------------------
 4. Go into the downloaded folder and open terminal(right click).
 ------------------------------------------------------

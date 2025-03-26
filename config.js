@@ -1,9 +1,9 @@
 // UPDATE THIS PLSSS
 const config = {
-    TOKEN: "", // Token of bot
-    CLIENT_ID: "1354010463007936573", // clientId of bot
+    TOKEN: "", // Token of bot (inside " ")
+    CLIENT_ID: "", // clientId of bot (inside " ")
     SCAN_INTERVAL: 4000, // interval to scan each server
-    OWNER_ID: "1284523392850071636", // ID of owner
+    OWNER_ID: "", // ID of owner (inside " ")
     userAlters: {},
 }
 export { config };

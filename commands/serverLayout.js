@@ -4,7 +4,7 @@ import { AttachmentBuilder } from 'discord.js';
 
 const createMap = async (interaction, serverId) => {
     if (!serverSpots[serverId]) return interaction.reply("Invalid serverId.");
-
+    await interaction.deferReply();
     const spots = serverSpots[serverId].spots;
     const image = new Jimp({ width: 2400, height: 2400, color: '#688D41' });
     for (const resource in spots) {
@@ -25,7 +25,7 @@ const createMap = async (interaction, serverId) => {
     // send the image
     const buffer = await image.getBuffer('image/png');
     const attachment = new AttachmentBuilder(buffer, { name: `${serverId}.png` });
-    await interaction.channel.send({ files: [attachment] })
+    await interaction.editReply({ files: [attachment] })
 }
 
 let serverSpots;
