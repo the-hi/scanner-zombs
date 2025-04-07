@@ -1,19 +1,29 @@
+import { config } from '../config.js';
 import { LeaderBoard } from '../scanner.js';
-import { buildEmbed } from './buildEmbed.js';
+import { buildEmbed } from '../utils/buildEmbed.js';
+import { sendEmbeds } from '../utils/sendEmbeds.js';
 
 const fullCommand = async (interaction) => {
     const filledServers = [];
-    const filledServerEmbed = buildEmbed(`Filled servers list`, interaction);
+    const filledServerEmbeds = [];
     LeaderBoard.forEach(server => {
-        if (server.pop === 32) {
+        if (server.isFull) {
             filledServers.push({
-                name: server.id,
-                value: `Population: ${server.pop}, Leaderboard ` + (server.lb.length !== 0 ? "available!" : "not available:sob:."),
+                name: `**[${server.id}] ${server.name}**`,
+                value: `Leaderboard ` + (server.lb.length !== 0 ? "available!" : "not available :sob:"),
             })
         }
     });
+    for (let x = 0; x < filledServers.length; x += config.maxEmbedFields) {
+        const fields = [];
+        const embed = buildEmbed(`Filled servers list, Results: ${filledServers.length}`, interaction);
+        for (let y = x; y < Math.min(filledServers.length, x + config.maxEmbedFields); y++) {
+            fields.push(filledServers[y])
+        }
+        embed.addFields(fields);
+        filledServerEmbeds.push(embed);
+    }
     // msg
-    filledServerEmbed.addFields(filledServers);
-    interaction.reply({ embeds: [filledServerEmbed] })
+    await sendEmbeds(interaction, filledServerEmbeds)
 }
 export { fullCommand };

@@ -94,7 +94,6 @@ class BinCodec {
         }
     };
     decodePreEnterWorldResponse(buffer, Module_ = Module) {
-        console.log(JSON.stringify(Array.from(new Uint8Array(buffer.buffer))))
         this.startedDecoding = Date.now();
 
         Module_._MakeBlendField(24, 132)
@@ -104,8 +103,6 @@ class BinCodec {
         for (var secondSync = Module_._MakeBlendField(4, 152), extraBuffers = new ArrayBuffer(64), exposedBuffers = new Uint8Array(extraBuffers), i = 0; i < 64; i++) {
             exposedBuffers[i] = Module_.HEAPU8[secondSync + i];
         }
-        console.log(JSON.stringify(Array.from(new Uint8Array(extraBuffers))))
-        console.log("Finished decoding this data in " + ((Date.now() - this.startedDecoding) / 1000) + " second/s.")
         return {
             extra: extraBuffers
         };
@@ -412,4 +409,4 @@ class BinCodec {
         buffer.writeUint8(0);
     };
 }
-export default BinCodec
+export default BinCodec;

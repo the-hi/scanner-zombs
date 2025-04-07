@@ -1,6 +1,8 @@
 import { config } from './config.js'
 import { getStatus } from './commands/getStatus.js';
+import { getStashes } from './commands/getStashes.js';
 import { createMap } from './commands/serverLayout.js';
+import { serverStats } from './commands/serverStats.js';
 import { highestWave } from './commands/highestWave.js';
 import { scanCommand } from './commands/scanCommand.js';
 import { findCommand } from './commands/findCommand.js';
@@ -9,8 +11,7 @@ import { removeAlert } from './commands/removeAlert.js';
 import { statsCommand } from './commands/statsCommand.js';
 import { alertCommand } from './commands/alertCommand.js';
 import { highestScore } from './commands/highestScore.js';
-import { changeInterval } from './commands/changeInterval.js';
-import { REST, Routes, Client, GatewayIntentBits, PresenceUpdateStatus } from 'discord.js';
+import { REST, Routes, Client, GatewayIntentBits, PresenceUpdateStatus, MessageFlags } from 'discord.js';
 
 const client = new Client({
     intents: [
@@ -26,7 +27,8 @@ client.once('ready', () => {
         activities: [{ name: 'jking is gay.' }],
         status: PresenceUpdateStatus.DoNotDisturb
     });
-    client.user.setAvatar('https://cdn.discordapp.com/avatars/1284523392850071636/ef5a9ed7c007f1671301bc3464dc4ab2.webp?size=512')
+
+    //client.user.setAvatar('https://cdn.discordapp.com/avatars/1284523392850071636/ef5a9ed7c007f1671301bc3464dc4ab2.webp?size=512')
 });
 
 const clientUptime = Date.now();
@@ -40,12 +42,12 @@ const commands = [
     {
         name: 'highestwave',
         description: 'highestWave [min wave]',
-        options: [{ name: "minwave", description: "Enter the max wave you want to log", type: 3, required: true }]
+        options: [{ name: "minwave", description: "Enter the min wave you want to log", type: 3, required: true }]
     },
     {
         name: 'highestscore',
         description: 'highestScore [min score]',
-        options: [{ name: "minscore", description: "Enter the max score you want to log", type: 3, required: true }]
+        options: [{ name: "minscore", description: "Enter the min score you want to log", type: 3, required: true }]
     },
     {
         name: 'find',
@@ -66,11 +68,6 @@ const commands = [
         description: 'Find game stats',
     },
     {
-        name: 'changeinterval',
-        description: 'modify time between scans, changeinterval [time in milliseconds]',
-        options: [{ name: "time", description: "Enter Interval", type: 3, required: true }]
-    },
-    {
         name: 'alert',
         description: 'get alerts when server pop reaches a threshold, alter [serverId] [threshold pop]',
         options: [{ name: "serverid", description: "Enter serverId", type: 3, required: true }, { name: "threshold", description: "Enter threshold", type: 3, required: true }]
@@ -81,9 +78,18 @@ const commands = [
         options: [{ name: "serverid", description: "Enter serverId", type: 3, required: false }]
     },
     {
+        name: 'stashes',
+        description: "Get all stashes present in a server.",
+        options: [{ name: "serverid", description: "Enter serverId", type: 3, required: false }]
+    },
+    {
         name: 'status',
         description: "Get status of the bot.",
     },
+    {
+        name: 'servers',
+        description: "Get info about all servers.",
+    }
 ];
 
 try {
@@ -95,6 +101,8 @@ try {
 
 client.on("interactionCreate", async int => {
     const options = int?.options?._hoistedOptions;
+    console.log(int.user.username, int.commandName, options);
+
     switch (int.commandName) {
         case "scan":
             scanCommand(int, options[0]?.value);
@@ -117,9 +125,6 @@ client.on("interactionCreate", async int => {
         case "layout":
             createMap(int, options[0]?.value);
             break;
-        case "changeinterval":
-            changeInterval(int, options[0].value);
-            break;
         case "alert":
             alertCommand(int, options);
             break;
@@ -129,9 +134,18 @@ client.on("interactionCreate", async int => {
         case "status":
             getStatus(int, options);
             break;
+        case "stashes":
+            getStashes(int, options[0]?.value)
+            break;
+        case "servers":
+            serverStats(int);
+            break;
     }
 })
 
 client.login(config.TOKEN);
 
+process.on('uncaughtException', (err) => {
+    console.error('Uncaught Exception:', err);
+});
 export { client, clientUptime };
