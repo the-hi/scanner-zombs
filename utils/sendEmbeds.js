@@ -14,7 +14,7 @@ const sendEmbeds = async (interaction, embeds) => {
             .setStyle(ButtonStyle.Primary)
             .setEmoji(emoji)
             .setDisabled(isDisabled));
-    })
+    });
     const row = new ActionRowBuilder().addComponents(buttons);
     await interaction.editReply({ embeds: [embeds[0]], components: [row] });
     // update the embeds
