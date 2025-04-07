@@ -2,6 +2,8 @@ import { config } from "../config.js";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from "discord.js";
 
 const sendEmbeds = async (interaction, embeds) => {
+    // defer reply
+    await interaction.deferReply({ ephemeral: config.ephemeral });
     // initial buttons
     const buttons = [];
     ['⏮️', '⬅️', '➡️', '⏭️'].forEach((emoji, index) => {
@@ -15,8 +17,6 @@ const sendEmbeds = async (interaction, embeds) => {
     })
     const row = new ActionRowBuilder().addComponents(buttons);
     await interaction.editReply({ embeds: [embeds[0]], components: [row] });
-    // defer reply
-    await interaction.deferReply({ ephemeral: config.ephemeral });
     // update the embeds
     let currentPage = 0;
     const totalPages = embeds.length;
