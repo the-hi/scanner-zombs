@@ -28,7 +28,7 @@ client.once('ready', () => {
         status: PresenceUpdateStatus.DoNotDisturb
     });
 
-    //client.user.setAvatar('https://cdn.discordapp.com/avatars/1284523392850071636/ef5a9ed7c007f1671301bc3464dc4ab2.webp?size=512')
+    client.user.setAvatar('https://cdn.discordapp.com/avatars/1284523392850071636/ef5a9ed7c007f1671301bc3464dc4ab2.webp?size=512')
 });
 
 const clientUptime = Date.now();
