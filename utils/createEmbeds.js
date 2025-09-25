@@ -13,9 +13,9 @@ const createEmbeds = (sortedLb, title, interaction) => {
             const { name, wave, score, isFull, serverId, population, stash, playerTick } = sortedLb[index];
             embedContent.push({
                 name: `**(${index + 1}) ${name} (${serverId}), (${population}/32)${isFull ? "[FULL]" : ""}**`,
-                value: `Wave: ${format(wave)}, Score - ${format(score)}` +
-                    (playerTick ? `, \nX: ${playerTick.position.x.toFixed(0)}, Y: ${playerTick.position.y.toFixed(0)}, W: ${format(playerTick.wood)}, S: ${format(playerTick.stone)}, G: ${format(playerTick.gold)}` : "") +
-                    (stash ? `,\nStash - X: ${stash.position.x.toFixed(0)}, Y: ${stash.position.y.toFixed(0)}` : ""),
+                value: `🢂 **Wave**: ${format(wave)} & **Score**: ${format(score)}` +
+                    (playerTick ? `, \n**X: **${playerTick.position.x.toFixed(0)}**, Y: **${playerTick.position.y.toFixed(0)}**, W: **${format(playerTick.wood)}**, S: **${format(playerTick.stone)}**, G: **${format(playerTick.gold)}` : "") +
+                    (stash ? `,\n**Stash**: **{ x: **${stash.position.x.toFixed(0)}**, y: **${stash.position.y.toFixed(0)}** }**` : ""),
             });
         }
         embed.setFooter({ text: `Page ${embeds.length + 1} of ${Math.ceil(sortedLb.length/config.maxEmbedFields)}` });
