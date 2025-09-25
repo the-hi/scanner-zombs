@@ -23,5 +23,5 @@ Creating a project called Server Scanner is a response to a project of similar n
 ------------------------------------------------------
 5. Run "npm install" in the terminal(Only if u have issues with step 6.).
 ------------------------------------------------------
-6. Finnaly run "node ." in terminal.
+6. Finally run "node ." in terminal.
 ------------------------------------------------------
