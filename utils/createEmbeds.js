@@ -1,7 +1,6 @@
 import { format } from "./format.js";
 import { config } from "../config.js";
 import { buildEmbed } from "./buildEmbed.js";
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from "discord.js";
 
 const createEmbeds = (sortedLb, title, interaction) => {
     const embeds = [];

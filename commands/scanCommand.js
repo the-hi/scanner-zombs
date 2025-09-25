@@ -1,7 +1,9 @@
 import { config } from '../config.js';
+import { MessageFlags } from "discord.js";
+import { servers } from '../serverList.js';
 import { format } from '../utils/format.js';
+import { LeaderBoard } from '../scanner.js';
 import { buildEmbed } from '../utils/buildEmbed.js';
-import { LeaderBoard, servers } from '../scanner.js';
 
 const compact = (ms) => {
     const s = Math.floor(ms / 1000);
@@ -20,17 +22,18 @@ const compact = (ms) => {
 
 const scanCommand = async (interaction, options) => {
     // defer the reply
-    await interaction.deferReply({ ephemeral: config.ephemeral })
+    await interaction.deferReply({ flags: config.ephemeral ? MessageFlags.Ephemeral : undefined })
 
-    if (!LeaderBoard.has(options) && !servers[options]) {
+    const serverId = options[0]?.value;
+    if (!LeaderBoard.has(serverId) && !servers[serverId]) {
         const failedEmbed = buildEmbed(`Invalid serverId, try again with a valid serverId.`, interaction, '#FF0000');
         return await interaction.editReply({ embeds: [failedEmbed] })
     };
-    if (LeaderBoard.has(options)) {
+    if (LeaderBoard.has(serverId)) {
         const embedContent = [];
-        const server = LeaderBoard.get(options);
-        const embed = buildEmbed(`${servers[options].name} (${options}) (${server.pop}/32)${server.isFull ? "[FULL]" : ""} & Uptime: ${server.serverAge ? server.serverAge : '0s'} \nLastScanned: ${server.lastScanned ? compact(Date.now() - server.lastScanned) + " ago" : "Never."}`, interaction);
-        server.lb.forEach((player, index) => {
+        const serverData = LeaderBoard.get(serverId);
+        const embed = buildEmbed(`${servers[serverId].name} (${serverId}) (${serverData.pop}/32)${serverData.isFull ? "[FULL]" : ""} & Uptime: ${serverData.serverAge ? serverData.serverAge : '0s'} \nLastScanned: ${serverData.lastScanned ? compact(Date.now() - serverData.lastScanned) + " ago" : "Never."}`, interaction);
+        serverData.lb.forEach((player, index) => {
             const { name, wave, uid, score, playerTick, stash } = player;
             embedContent.push({
                 name: `(${index + 1}) [${uid}] ${name}`,
@@ -41,9 +44,9 @@ const scanCommand = async (interaction, options) => {
         })
         embed.addFields(embedContent)
         await interaction.editReply({ embeds: [embed] })
-    } else if (!LeaderBoard.has(options) && servers[options]) {
+    } else if (!LeaderBoard.has(serverId) && servers[serverId]) {
         const failedEmbed = buildEmbed(`Server has not been scanned yet.`, interaction, '#FF0000');
         return await interaction.editReply({ embeds: [failedEmbed] })
     }
 }
-export { scanCommand };
+export { scanCommand as scan };

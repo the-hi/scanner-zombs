@@ -1,9 +1,10 @@
-import { config } from '../config.js'
+import { config } from '../config.js';
+import { MessageFlags } from "discord.js";
 import { buildEmbed } from '../utils/buildEmbed.js';
 
 const removeAlert = async (interaction, options) => {
     // defer the reply
-    await interaction.deferReply({ ephemeral: config.ephemeral })
+    await interaction.deferReply({ flags: config.ephemeral ? MessageFlags.Ephemeral : undefined })
 
     const userId = interaction.user.id;
     const serverId = options[0]?.value;
@@ -31,4 +32,4 @@ const removeAlert = async (interaction, options) => {
         }
     }
 }
-export { removeAlert };
+export { removeAlert as removealert };

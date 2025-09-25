@@ -1,9 +1,10 @@
 import { config } from "../config.js";
+import { MessageFlags } from "discord.js";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from "discord.js";
 
 const sendEmbeds = async (interaction, embeds) => {
     // defer reply
-    await interaction.deferReply({ ephemeral: config.ephemeral });
+    await interaction.deferReply({ flags: config.ephemeral ? MessageFlags.Ephemeral : undefined })
     // initial buttons
     const buttons = [];
     ['⏮️', '⬅️', '➡️', '⏭️'].forEach((emoji, index) => {

@@ -26,4 +26,4 @@ const fullCommand = async (interaction) => {
     // msg
     await sendEmbeds(interaction, filledServerEmbeds)
 }
-export { fullCommand };
+export { fullCommand as full };

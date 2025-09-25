@@ -3,10 +3,11 @@ import { sendEmbeds } from '../utils/sendEmbeds.js';
 import { createEmbeds } from '../utils/createEmbeds.js';
 
 const highestWave = async (interaction, options) => {
-    const Leaderboard = filterLB('wave', options);
-    const { embeds } = createEmbeds(Leaderboard, `Highest waves above wave ${options}, Results: ${Leaderboard.length}`, interaction);
+    const targetWave = options[0]?.value;
+    const Leaderboard = filterLB('wave', targetWave);
+    const { embeds } = createEmbeds(Leaderboard, `Highest waves above wave ${targetWave}, Results: ${Leaderboard.length}`, interaction);
 
     await sendEmbeds(interaction, embeds);
 };
 
-export { highestWave };
+export { highestWave as highestwave };

@@ -1,5 +1,6 @@
-import { config } from '../config.js'
-import { servers } from '../scanner.js'
+import { config } from '../config.js';
+import { MessageFlags } from "discord.js";
+import { servers } from '../serverList.js';
 import { buildEmbed } from '../utils/buildEmbed.js';
 
 const alertCommand = async (interaction, options) => {
@@ -7,7 +8,7 @@ const alertCommand = async (interaction, options) => {
     const serverId = options[0].value;
     const threshold = options[1].value;
     // defer the reply
-    await interaction.deferReply({ ephemeral: config.ephemeral});
+    await interaction.deferReply({ flags: config.ephemeral ? MessageFlags.Ephemeral : undefined });
     // if the input is invalid
     if (!servers[serverId]) {
         const failedEmbed = buildEmbed("Enter a valid serverId.", interaction, '#FF0000');
@@ -33,4 +34,4 @@ const alertCommand = async (interaction, options) => {
         interaction.editReply({ embeds: [failedEmbed] })
     }
 }
-export { alertCommand };
+export { alertCommand as alert };

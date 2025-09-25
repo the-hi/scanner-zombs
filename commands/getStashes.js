@@ -1,19 +1,22 @@
 import { config } from '../config.js';
-import { stashSpotted, servers } from '../scanner.js';
+import { MessageFlags } from "discord.js";
+import { servers } from '../serverList.js';
+import { stashSpotted } from '../scanner.js';
 import { buildEmbed } from '../utils/buildEmbed.js';
 import { sendEmbeds } from '../utils/sendEmbeds.js';
 
 const getStashes = async (interaction, options) => {
-    if (options && !servers[options]) {
-        await interaction.deferReply({ ephemeral: config.ephemeral })
-        return interaction.editReply({ content: `Server ${options} not found` });
+    const serverId = options[0]?.value;
+    if (serverId && !servers[serverId]) {
+        await interaction.deferReply({ flags: config.ephemeral ? MessageFlags.Ephemeral : undefined })
+        return interaction.editReply({ content: `Server ${serverId} not found` });
     };
 
     const stashes = [];
     const stashEmbeds = [];
-    if (options) {
-        for (const _stash in stashSpotted[options]) {
-            const stash = stashSpotted[options][_stash];
+    if (serverId) {
+        for (const _stash in stashSpotted[serverId]) {
+            const stash = stashSpotted[serverId][_stash];
             stashes.push({
                 name: `**[${stash.uid}] ${stash.partyId}**`,
                 value: `Tier: ${stash.tier}, x: ${stash.position.x}, y: ${stash.position.y}`
@@ -33,12 +36,12 @@ const getStashes = async (interaction, options) => {
         }
     };
     if (stashes.length === 0) {
-        const embed = buildEmbed(`Stashes in ${options ? options : "game"}, Results: ${stashes.length}`, interaction);
+        const embed = buildEmbed(`Stashes in ${serverId ? serverId : "game"}, Results: ${stashes.length}`, interaction);
         stashEmbeds.push(embed)
     }
     for (let x = 0; x < stashes.length; x += config.maxEmbedFields) {
         const stashFields = []
-        const embed = buildEmbed(`Stashes in ${options ? options : "game"}, Results: ${stashes.length}`, interaction);
+        const embed = buildEmbed(`Stashes in ${serverId ? serverId : "game"}, Results: ${stashes.length}`, interaction);
         for (let y = x; y < Math.min(stashes.length, x + config.maxEmbedFields); y++) {
             stashFields.push(stashes[y]);
         }
@@ -49,4 +52,4 @@ const getStashes = async (interaction, options) => {
     // msg
     await sendEmbeds(interaction, stashEmbeds)
 }
-export { getStashes };
+export { getStashes as stashes };

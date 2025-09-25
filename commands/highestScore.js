@@ -4,10 +4,11 @@ import { sendEmbeds } from '../utils/sendEmbeds.js';
 import { createEmbeds } from '../utils/createEmbeds.js';
 
 const highestScore = async (interaction, options) => {
-    const LeaderBoard = filterLB('score', options);
-    const { embeds } = createEmbeds(LeaderBoard, `Highest scores above score ${format(parseInt(options))}, Results: ${LeaderBoard.length}`, interaction);
+    const targetScore = options[0]?.value;
+    const LeaderBoard = filterLB('score', targetScore);
+    const { embeds } = createEmbeds(LeaderBoard, `Highest scores above score ${format(parseInt(targetScore))}, Results: ${LeaderBoard.length}`, interaction);
 
     await sendEmbeds(interaction, embeds);
 };
 
-export { highestScore };
+export { highestScore as highestscore };

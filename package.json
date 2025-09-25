@@ -1,35 +1,18 @@
 {
   "name": "scanner-zombs",
   "version": "1.0.0",
-  "description": "Server scanner for zombs.io",
+  "description": "",
   "main": "discordBot.js",
+  "dependencies": {
+    "bytebuffer": "^5.0.1",
+    "discord.js": "^14.22.1",
+    "jimp": "^1.6.0",
+    "ws": "^8.18.3"
+  },
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/the-hi/scanner-zombs.git"
-  },
-  "author": "The_hi.",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/the-hi/scanner-zombs/issues"
-  },
-  "homepage": "https://github.com/the-hi/scanner-zombs#readme",
-  "dependencies": {
-    "bytebuffer": "^5.0.1",
-    "canvas": "^3.1.0",
-    "discord.js": "^14.18.0",
-    "fs": "^0.0.1-security",
-    "jimp": "^1.6.0",
-    "node-fetch": "^3.3.2",
-    "skia-canvas": "^2.0.2",
-    "undici": "^7.5.0",
-    "ws": "^8.18.1"
-  },
-  "devDependencies": {
-    "esbuild": "^0.25.2",
-    "rollup": "^4.39.0"
-  }
+  "author": "",
+  "license": "ISC"
 }

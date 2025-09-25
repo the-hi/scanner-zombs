@@ -3,10 +3,11 @@ import { sendEmbeds } from '../utils/sendEmbeds.js';
 import { createEmbeds } from '../utils/createEmbeds.js';
 
 const findCommand = async (interaction, options) => {
-    const Leaderboard = filterLB('name', options);
-    const { embeds } = createEmbeds(Leaderboard, `Players with name ${options}, Results: ${Leaderboard.length}`, interaction);
+    const targetName = options[0]?.value;
+    const Leaderboard = filterLB('name', targetName);
+    const { embeds } = createEmbeds(Leaderboard, `Players with name ${targetName}, Results: ${Leaderboard.length}`, interaction);
 
     await sendEmbeds(interaction, embeds);
 };
 
-export { findCommand };
+export { findCommand as find };

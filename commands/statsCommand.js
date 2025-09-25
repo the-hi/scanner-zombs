@@ -1,10 +1,12 @@
 import { config } from '../config.js';
+import { MessageFlags } from "discord.js";
+import { servers } from '../serverList.js';
+import { LeaderBoard, } from '../scanner.js';
 import { buildEmbed } from '../utils/buildEmbed.js';
-import { LeaderBoard, servers } from '../scanner.js';
 
 const statsCommand = async (interaction) => {
     // defer the reply
-    await interaction.deferReply({ ephemeral: config.ephemeral })
+    await interaction.deferReply({ flags: config.ephemeral ? MessageFlags.Ephemeral : undefined })
 
     const statEmbed = buildEmbed(`Zombs server stats`, interaction);
     const serverPopulations = { full: 0, high: 0, medium: 0, low: 0, currentPopulation: 0, totalPopulation: Object.keys(servers).length * 32 };
@@ -26,7 +28,7 @@ const statsCommand = async (interaction) => {
     // msg
     const { full, high, medium, low, currentPopulation, totalPopulation } = serverPopulations;
     const fields = [{ name: `Server stats`, value: `Total population: ${totalPopulation},\nCurrent population: ${currentPopulation},\nFull servers: ${full},\nHigh servers: ${high},\nMedium servers: ${medium},\n Low servers: ${low}`, inline: true }]
-    for (const region of ["US East", "Europe", "US West", "Asia", "Australia", "South America"]) {
+    for (const region of ["US East", "Europe", "US West", "Asia", "Australia"]) {
         const similarServers = Object.values(servers).filter(e => e.region == region);
         fields.push({
             name: region,
@@ -37,4 +39,4 @@ const statsCommand = async (interaction) => {
     statEmbed.addFields(fields);
     await interaction.editReply({ embeds: [statEmbed] })
 }
-export { statsCommand };
+export { statsCommand as stats };

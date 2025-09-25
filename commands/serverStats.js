@@ -26,4 +26,4 @@ const serverStats = async (interaction) => {
     await sendEmbeds(interaction, serverEmbeds);
 }
 
-export { serverStats };
+export { serverStats as servers };

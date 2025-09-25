@@ -1,4 +1,5 @@
 import { config } from '../config.js';
+import { MessageFlags } from "discord.js";
 import { serversScanned } from '../scanner.js';
 import { buildEmbed } from '../utils/buildEmbed.js';
 import { clientUptime, client } from '../discordBot.js';
@@ -18,7 +19,7 @@ const compact = (ms) => {
 
 const getStatus = async (interaction) => {
     // defer the reply
-    await interaction.deferReply({ ephemeral: config.ephemeral })
+    await interaction.deferReply({ flags: config.ephemeral ? MessageFlags.Ephemeral : undefined })
     
     const statsEmbed = buildEmbed(`Bot stats`, interaction);
     statsEmbed.addFields({ name: `Ping:`, value: `${client.ws.ping / 1000}s` });
@@ -26,4 +27,4 @@ const getStatus = async (interaction) => {
     statsEmbed.addFields({ name: `Servers Scanned:`, value: `Leaderboard grabbed ${serversScanned} times.` });
     interaction.editReply({ embeds: [statsEmbed] });
 }
-export { getStatus };
+export { getStatus as status };

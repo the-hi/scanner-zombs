@@ -1,14 +1,14 @@
 import { Jimp } from 'jimp';
-import fetch from "node-fetch";
 import { config } from '../config.js';
-import { AttachmentBuilder } from 'discord.js';
+import { AttachmentBuilder, MessageFlags } from 'discord.js';
 
-const createMap = async (interaction, serverId) => {
+const createMap = async (interaction, options) => {
     // defer the reply
-    await interaction.deferReply({ ephemeral: config.ephemeral })
+    await interaction.deferReply({ flags: config.ephemeral ? MessageFlags.Ephemeral : undefined })
 
+    const serverId = options[0]?.value;
     if (!serverSpots[serverId]) {
-        const failedEmbed = buildEmbed("Invalid serverId.", interaction, '#FF0000');
+        const failedEmbed = buildEmbed("Invalid serverId or the spots haven't been scanned yet.", interaction, '#FF0000');
         return await interaction.editReply({ embeds: [failedEmbed] })
     }
 
@@ -84,7 +84,7 @@ const decodeSpotJSON = (json) => {
     return obj;
 }
 
-fetch("https://zombs-server-spots.glitch.me/serverspots.js").then(e => e.text()).then(e => {
+fetch("https://lbbzombs.github.io/zombs-server-spots/serverspots.js").then(e => e.text()).then(e => {
     const spotsJSON = JSON.parse(filterText(e));
     for (const server in spotsJSON) {
         spotsJSON[server].spots = decodeSpotJSON(spotsJSON[server].spotEncoded);
@@ -94,4 +94,4 @@ fetch("https://zombs-server-spots.glitch.me/serverspots.js").then(e => e.text())
     console.log('Server spots fetched.')
 })
 
-export { createMap };
+export { createMap as layout };

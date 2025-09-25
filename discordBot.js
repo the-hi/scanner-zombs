@@ -1,16 +1,5 @@
 import { config } from './config.js'
-import { getStatus } from './commands/getStatus.js';
-import { getStashes } from './commands/getStashes.js';
-import { createMap } from './commands/serverLayout.js';
-import { serverStats } from './commands/serverStats.js';
-import { highestWave } from './commands/highestWave.js';
-import { scanCommand } from './commands/scanCommand.js';
-import { findCommand } from './commands/findCommand.js';
-import { fullCommand } from './commands/fullCommand.js';
-import { removeAlert } from './commands/removeAlert.js';
-import { statsCommand } from './commands/statsCommand.js';
-import { alertCommand } from './commands/alertCommand.js';
-import { highestScore } from './commands/highestScore.js';
+import { commands as userCommands } from './utils/commands.js';
 import { REST, Routes, Client, GatewayIntentBits, PresenceUpdateStatus, MessageFlags } from 'discord.js';
 
 const client = new Client({
@@ -20,19 +9,18 @@ const client = new Client({
     ]
 });
 
-client.once('ready', () => {
+client.once('clientReady', () => {
     console.log(`Logged in as ${client.user.tag}`);
 
     client.user.setPresence({
         activities: [{ name: 'jking is gay.' }],
         status: PresenceUpdateStatus.DoNotDisturb
     });
-
-    client.user.setAvatar('https://cdn.discordapp.com/avatars/1284523392850071636/ef5a9ed7c007f1671301bc3464dc4ab2.webp?size=512')
 });
 
 const clientUptime = Date.now();
 const rest = new REST({ version: '10' }).setToken(config.TOKEN);
+
 const commands = [
     {
         name: 'scan',
@@ -99,47 +87,14 @@ try {
     console.error("There's something wrong", error);
 }
 
+
 client.on("interactionCreate", async int => {
     const options = int?.options?._hoistedOptions;
     console.log(int.user.username, int.commandName, options);
 
-    switch (int.commandName) {
-        case "scan":
-            scanCommand(int, options[0]?.value);
-            break;
-        case "stats":
-            statsCommand(int);
-            break;
-        case "highestwave":
-            highestWave(int, options[0]?.value);
-            break;
-        case "highestscore":
-            highestScore(int, options[0]?.value);
-            break;
-        case "find":
-            findCommand(int, options[0]?.value);
-            break;
-        case "full":
-            fullCommand(int);
-            break;
-        case "layout":
-            createMap(int, options[0]?.value);
-            break;
-        case "alert":
-            alertCommand(int, options);
-            break;
-        case "removealert":
-            removeAlert(int, options);
-            break;
-        case "status":
-            getStatus(int, options);
-            break;
-        case "stashes":
-            getStashes(int, options[0]?.value)
-            break;
-        case "servers":
-            serverStats(int);
-            break;
+    const commandFunc = userCommands.get(int.commandName);
+    if (commandFunc) {
+        commandFunc(int, options);
     }
 })
 
@@ -148,4 +103,5 @@ client.login(config.TOKEN);
 process.on('uncaughtException', (err) => {
     console.error('Uncaught Exception:', err);
 });
+
 export { client, clientUptime };
